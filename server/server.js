@@ -7,8 +7,10 @@ const { createServer } = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 
-// Load env vars
-dotenv.config({ path: path.join(__dirname, '../.env') });
+// Load env vars from file only in development — in production Fly injects them directly
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: path.join(__dirname, '../.env') });
+}
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -91,6 +93,6 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
