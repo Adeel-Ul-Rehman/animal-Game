@@ -29,9 +29,28 @@ const { startGameLoop } = require('./utils/gameEngine');
 
 const app = express();
 const httpServer = createServer(app);
+
+const rawClientUrls = (process.env.CLIENT_URL || 'http://localhost:3000')
+  .split(',')
+  .map((url) => url.trim())
+  .filter(Boolean);
+
+const normalizedAllowedOrigins = [...new Set(rawClientUrls.flatMap((url) => {
+  if (/^https?:\/\//i.test(url)) {
+    return [url];
+  }
+  return [`https://${url}`, `http://${url}`];
+}))];
+
+const corsOriginValidator = (origin, callback) => {
+  if (!origin) return callback(null, true);
+  if (normalizedAllowedOrigins.includes(origin)) return callback(null, true);
+  return callback(new Error(`Not allowed by CORS: ${origin}`));
+};
+
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: normalizedAllowedOrigins,
     credentials: true
   }
 });
@@ -41,7 +60,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: corsOriginValidator,
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
