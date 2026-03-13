@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useSocket } from "../context/SocketContext";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { FaUsers, FaSignOutAlt, FaCamera, FaKey, FaEdit, FaTimes, FaTrash, FaEye, FaEyeSlash, FaCheck, FaBell, FaCoins, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
+import { FaUsers, FaSignOutAlt, FaCamera, FaKey, FaEdit, FaTimes, FaTrash, FaEye, FaEyeSlash, FaCheck, FaBell, FaCoins, FaVolumeUp, FaVolumeMute, FaHistory, FaExpand } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import soundManager from "../utils/soundManager";
 
@@ -92,6 +92,9 @@ const Game = () => {
   const [coinRequestAmount, setCoinRequestAmount] = useState(100);
   const [coinRequestLoading, setCoinRequestLoading] = useState(false);
   const [latestCoinRequest, setLatestCoinRequest] = useState(null);
+  const [viewportHeight, setViewportHeight] = useState(
+    () => window.visualViewport?.height || window.innerHeight
+  );
   const [spinSnake, setSpinSnake] = useState([]); // Array of boxes in the snake
   const [spinIntensity, setSpinIntensity] = useState(0); // 0-1 for overall spin intensity
   const [showResultOverlay, setShowResultOverlay] = useState(false);
@@ -143,14 +146,50 @@ const Game = () => {
     window.addEventListener("orientationchange", check);
     return () => { window.removeEventListener("resize", check); window.removeEventListener("orientationchange", check); };
   }, []);
+
+  useEffect(() => {
+    const updateViewportHeight = () => {
+      const nextHeight = Math.round(window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight);
+      setViewportHeight(nextHeight);
+      document.documentElement.style.setProperty('--app-vh', `${nextHeight}px`);
+    };
+
+    updateViewportHeight();
+    window.addEventListener('resize', updateViewportHeight);
+    window.addEventListener('orientationchange', updateViewportHeight);
+    window.visualViewport?.addEventListener('resize', updateViewportHeight);
+    window.visualViewport?.addEventListener('scroll', updateViewportHeight);
+
+    return () => {
+      window.removeEventListener('resize', updateViewportHeight);
+      window.removeEventListener('orientationchange', updateViewportHeight);
+      window.visualViewport?.removeEventListener('resize', updateViewportHeight);
+      window.visualViewport?.removeEventListener('scroll', updateViewportHeight);
+    };
+  }, []);
+
   // Responsive layout values derived from isMobileLandscape
-  const navH       = isMobileLandscape ? "36px"  : "clamp(45px, 7vh, 60px)";
-  const footerH    = isMobileLandscape ? "48px"  : "clamp(74px, 10.5vh, 88px)";
-  const boardOff   = isMobileLandscape ? "94px"  : "140px";
-  const chipSize   = isMobileLandscape ? "28px"  : "clamp(40px, 5.2vw, 50px)";
-  const chipFont   = isMobileLandscape ? "7px"   : "clamp(8px, 0.9vw, 11px)";
-  const btnSz      = isMobileLandscape ? "26px"  : "clamp(28px, 4vw, 38px)";
-  const btnFsz     = isMobileLandscape ? "11px"  : "clamp(12px, 1.6vw, 17px)";
+  const appVh      = `${viewportHeight}px`;
+  const navH       = isMobileLandscape ? "34px"  : "clamp(45px, 7vh, 60px)";
+  const footerH    = isMobileLandscape ? "46px"  : "clamp(74px, 10.5vh, 88px)";
+  const boardOff   = isMobileLandscape ? "88px"  : "140px";
+  const chipSize   = isMobileLandscape ? "24px"  : "clamp(40px, 5.2vw, 50px)";
+  const chipFont   = isMobileLandscape ? "6px"   : "clamp(8px, 0.9vw, 11px)";
+  const btnSz      = isMobileLandscape ? "24px"  : "clamp(28px, 4vw, 38px)";
+  const btnFsz     = isMobileLandscape ? "10px"  : "clamp(12px, 1.6vw, 17px)";
+
+  const requestFullscreen = async () => {
+    try {
+      const el = document.documentElement;
+      if (el.requestFullscreen) {
+        await el.requestFullscreen();
+      } else if (el.webkitRequestFullscreen) {
+        await el.webkitRequestFullscreen();
+      }
+    } catch (error) {
+      toast('Use Add to Home Screen for true full-screen on this browser');
+    }
+  };
 
   // Profile modal state
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -1282,7 +1321,7 @@ const Game = () => {
           /* ── Mobile landscape tweaks ── */
           @media (orientation: landscape) and (max-height: 500px) {
             .coin-req-label { display: none !important; }
-            .game-online-panel { top: 46px !important; max-height: calc(100vh - 60px) !important; }
+            .game-online-panel { top: 40px !important; max-height: calc(${appVh} - 52px) !important; }
           }
         `}
       </style>
@@ -1302,10 +1341,11 @@ const Game = () => {
 
       {/* Main Game Container */}
       <div
-        className="h-screen w-full overflow-hidden flex flex-col landscape:flex portrait:hidden"
+        className="w-full overflow-hidden flex flex-col landscape:flex portrait:hidden"
         style={{
           background: "linear-gradient(135deg, #0a2f1f 0%, #1a4d2e 100%)",
           color: "#ffffff",
+          height: appVh,
         }}
       >
 
@@ -1887,15 +1927,15 @@ const Game = () => {
               onClick={openProfileModal}
               title="Edit profile"
               style={{
-                width: "clamp(30px, 4.5vw, 40px)",
-                height: "clamp(30px, 4.5vw, 40px)",
+                width: isMobileLandscape ? "28px" : "clamp(30px, 4.5vw, 40px)",
+                height: isMobileLandscape ? "28px" : "clamp(30px, 4.5vw, 40px)",
                 borderRadius: "50%",
                 background: "linear-gradient(135deg, #2196F3, #9C27B0)",
                 border: "2px solid #ffd700",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "clamp(12px, 1.8vw, 18px)",
+                fontSize: isMobileLandscape ? "12px" : "clamp(12px, 1.8vw, 18px)",
                 fontWeight: "bold",
                 cursor: "pointer",
                 overflow: "hidden",
@@ -1910,7 +1950,7 @@ const Game = () => {
             <div>
               <div
                 style={{
-                  fontSize: "clamp(10px, 1.3vw, 13px)",
+                  fontSize: isMobileLandscape ? "10px" : "clamp(10px, 1.3vw, 13px)",
                   fontWeight: "bold",
                 }}
               >
@@ -1918,7 +1958,7 @@ const Game = () => {
               </div>
               <div
                 style={{
-                  fontSize: "clamp(11px, 1.5vw, 14px)",
+                  fontSize: isMobileLandscape ? "10px" : "clamp(11px, 1.5vw, 14px)",
                   color: "#ffd700",
                   fontWeight: "bold",
                   display: "flex",
@@ -2041,6 +2081,46 @@ const Game = () => {
                   display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold",
                 }}>✕</span>
               )}
+            </button>
+
+            <button
+              onClick={() => setShowHistory(!showHistory)}
+              style={{
+                width: btnSz,
+                height: btnSz,
+                borderRadius: "6px",
+                background: showHistory ? "#2f6f42" : "#1a4d2e",
+                border: "2px solid #ffd700",
+                color: "#ffd700",
+                fontSize: btnFsz,
+                cursor: "pointer",
+                display: isMobileLandscape ? "flex" : "none",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              title="History"
+            >
+              <FaHistory />
+            </button>
+
+            <button
+              onClick={requestFullscreen}
+              style={{
+                width: btnSz,
+                height: btnSz,
+                borderRadius: "6px",
+                background: "#1a4d2e",
+                border: "2px solid #ffd700",
+                color: "#ffd700",
+                fontSize: btnFsz,
+                cursor: "pointer",
+                display: isMobileLandscape ? "flex" : "none",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              title="Fullscreen"
+            >
+              <FaExpand />
             </button>
 
             <button
@@ -2171,8 +2251,12 @@ const Game = () => {
           <div
             style={{
               position: "relative",
-              width: `min(98vw, calc((100vh - ${boardOff}) * 1.7))`,
-              height: `min(calc(100vh - ${boardOff}), calc(98vw / 1.7))`,
+              width: isMobileLandscape
+                ? `min(86vw, calc((${appVh} - ${boardOff}) * 1.56))`
+                : `min(98vw, calc((${appVh} - ${boardOff}) * 1.7))`,
+              height: isMobileLandscape
+                ? `min(calc(${appVh} - ${boardOff}), calc(86vw / 1.56))`
+                : `min(calc(${appVh} - ${boardOff}), calc(98vw / 1.7))`,
               maxWidth: "1800px",
               maxHeight: "1000px",
             }}
@@ -3424,12 +3508,12 @@ const Game = () => {
             style={{
               position: "absolute",
               right:
-                "calc((100% - min(98vw, calc((100vh - 140px) * 1.7))) / 2 - clamp(70px, 9vw, 110px))",
+                `calc((100% - min(98vw, calc((${appVh} - 140px) * 1.7))) / 2 - clamp(70px, 9vw, 110px))`,
               top: "50%",
               transform: "translateY(-50%)",
               width: "clamp(60px, 8vw, 100px)",
               height:
-                "min(calc((100vh - 140px) - 20px), calc(98vw / 1.7 - 20px))",
+                `min(calc((${appVh} - 140px) - 20px), calc(98vw / 1.7 - 20px))`,
               maxHeight: "980px",
               background: "rgba(26, 77, 46, 0.95)",
               border: "3px solid #ffd700",
@@ -3517,6 +3601,55 @@ const Game = () => {
           </div>
 
         </main>
+
+        <AnimatePresence>
+          {isMobileLandscape && showHistory && (
+            <motion.div
+              initial={{ opacity: 0, x: -24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -24 }}
+              style={{
+                position: "fixed",
+                top: `calc(${navH} + 6px)`,
+                left: "6px",
+                width: "52px",
+                maxHeight: `calc(${appVh} - ${navH} - ${footerH} - 18px)`,
+                background: "rgba(26, 77, 46, 0.97)",
+                border: "2px solid #ffd700",
+                borderRadius: "10px",
+                overflowY: "auto",
+                overflowX: "hidden",
+                padding: "4px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "4px",
+                zIndex: 140,
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.6)",
+              }}
+              className="custom-scrollbar"
+            >
+              {historyResults.map((result, index) => (
+                <div
+                  key={result.roundId ?? index}
+                  style={{
+                    fontSize: "28px",
+                    textAlign: "center",
+                    padding: "4px",
+                    background: index === historyResults.length - 1 ? "rgba(255,215,0,0.18)" : "transparent",
+                    borderRadius: "6px",
+                    border: index === historyResults.length - 1 ? "2px solid #ffd700" : "1px solid transparent",
+                    minHeight: "36px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {getResultEmoji(result.result)}
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* BOTTOM BAR — coin chips centered + total bet */}
         <footer
@@ -3848,7 +3981,7 @@ const Game = () => {
               top: isMobileLandscape ? "44px" : "clamp(60px,9vh,80px)",
               right: "16px",
               width: isMobileLandscape ? "min(260px, 60vw)" : "clamp(260px,30vw,320px)",
-              maxHeight: isMobileLandscape ? "calc(100vh - 58px)" : "calc(100vh - 100px)",
+              maxHeight: isMobileLandscape ? `calc(${appVh} - 52px)` : `calc(${appVh} - 100px)`,
               background: "linear-gradient(160deg,#0a2f1f,#1a4d2e)",
               border: "2px solid #ffd700",
               borderRadius: "14px",
