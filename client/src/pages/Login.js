@@ -113,6 +113,12 @@ const Login = () => {
               Register here
             </Link>
           </p>
+          <Link
+            to="/register"
+            className="inline-block mt-3 px-4 py-2 rounded-lg bg-white/15 border border-white/30 text-white hover:bg-white/20 transition"
+          >
+            Create New Account
+          </Link>
         </div>
       </div>
     </div>

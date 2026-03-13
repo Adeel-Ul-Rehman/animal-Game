@@ -16,6 +16,10 @@ body {
   width: 100vw;
 }
 
+body.auth-page {
+  overflow: auto;
+}
+
 #root {
   height: 100%;
   width: 100%;
@@ -28,11 +32,11 @@ code {
 
 /* Force Landscape on Mobile / Tablet */
 @media (orientation: portrait) and (max-width: 1024px) {
-  .app > div:not(.portrait\:flex) {
+  body.force-landscape .app > div:not(.portrait\:flex) {
     display: none !important;
   }
   
-  .portrait\:flex {
+  body.force-landscape .portrait\:flex {
     display: flex !important;
     position: fixed;
     inset: 0;

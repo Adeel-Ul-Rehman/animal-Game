@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
@@ -13,51 +13,26 @@ import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
 import './App.css';
 
-// Mobile orientation handler
-const useOrientation = () => {
-  useEffect(() => {
-    const handleOrientationChange = () => {
-      const isPortrait = window.innerHeight > window.innerWidth;
-      const isMobile = window.innerWidth <= 768;
-      
-      if (isMobile && isPortrait) {
-        document.body.classList.add('portrait-mode');
-        // Show orientation message
-        const orientationMsg = document.querySelector('.portrait\\:flex');
-        if (orientationMsg) {
-          orientationMsg.style.display = 'flex';
-        }
-      } else {
-        document.body.classList.remove('portrait-mode');
-        const orientationMsg = document.querySelector('.portrait\\:flex');
-        if (orientationMsg) {
-          orientationMsg.style.display = 'none';
-        }
-      }
-    };
-    
-    // Initial check
-    handleOrientationChange();
-    
-    // Add event listeners
-    window.addEventListener('resize', handleOrientationChange);
-    window.addEventListener('orientationchange', handleOrientationChange);
-    
-    return () => {
-      window.removeEventListener('resize', handleOrientationChange);
-      window.removeEventListener('orientationchange', handleOrientationChange);
-    };
-  }, []);
-};
+const AppContent = () => {
+  const location = useLocation();
 
-function App() {
-  useOrientation();
-  
+  useEffect(() => {
+    const isGameRoute = location.pathname === '/game';
+    const isAuthRoute = ['/login', '/register', '/forgot-password', '/reset-password'].includes(location.pathname);
+
+    document.body.classList.toggle('force-landscape', isGameRoute);
+    document.body.classList.toggle('auth-page', isAuthRoute);
+
+    return () => {
+      document.body.classList.remove('force-landscape');
+      document.body.classList.remove('auth-page');
+    };
+  }, [location.pathname]);
+
   return (
-    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <AuthProvider>
-        <SocketProvider>
-          <div className="app">
+    <AuthProvider>
+      <SocketProvider>
+        <div className="app">
             <Toaster 
               position="top-center"
               toastOptions={{
@@ -99,26 +74,33 @@ function App() {
               </div>
             </div>
             
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/game" element={
-                <PrivateRoute>
-                  <Game />
-                </PrivateRoute>
-              } />
-              <Route path="/admin" element={
-                <AdminRoute>
-                  <AdminDashboard />
-                </AdminRoute>
-              } />
-              <Route path="/" element={<Navigate to="/game" />} />
-            </Routes>
-          </div>
-        </SocketProvider>
-      </AuthProvider>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/game" element={
+              <PrivateRoute>
+                <Game />
+              </PrivateRoute>
+            } />
+            <Route path="/admin" element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            } />
+            <Route path="/" element={<Navigate to="/game" />} />
+          </Routes>
+        </div>
+      </SocketProvider>
+    </AuthProvider>
+  );
+};
+
+function App() {
+  return (
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <AppContent />
     </Router>
   );
 }
