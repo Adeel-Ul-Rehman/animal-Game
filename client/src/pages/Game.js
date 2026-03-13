@@ -168,6 +168,14 @@ const Game = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isMobileLandscape) {
+      setShowHistory(true);
+    } else {
+      setShowHistory(false);
+    }
+  }, [isMobileLandscape]);
+
   // Responsive layout values derived from isMobileLandscape
   const appVh      = `${viewportHeight}px`;
   const navH       = isMobileLandscape ? "34px"  : "clamp(45px, 7vh, 60px)";
@@ -2502,9 +2510,9 @@ const Game = () => {
             <div
               style={{
                 position: "absolute",
-                top: "47%",
-                left: "26%",
-                transform: "translate(-50%, -50%) scale(0.9)",
+                top: isMobileLandscape ? "46%" : "47%",
+                left: isMobileLandscape ? "24%" : "26%",
+                transform: isMobileLandscape ? "translate(-50%, -50%) scale(0.76)" : "translate(-50%, -50%) scale(0.9)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -2518,10 +2526,10 @@ const Game = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gridTemplateRows: "repeat(2, 1fr)",
-                  gap: "clamp(4px, 0.8vw, 8px)", // ⬅ smaller gap
-                  transform: "translate(6px, 6px)", // ⬅ slightly reduced offset
-                  width: "clamp(220px, 22%, 300px)", // ⬅ reduced width
-                  height: "clamp(220px, 22%, 300px)", // ⬅ reduced height
+                  gap: isMobileLandscape ? "4px" : "clamp(4px, 0.8vw, 8px)",
+                  transform: isMobileLandscape ? "translate(3px, 3px)" : "translate(6px, 6px)",
+                  width: isMobileLandscape ? "170px" : "clamp(220px, 22%, 300px)",
+                  height: isMobileLandscape ? "170px" : "clamp(220px, 22%, 300px)",
                 }}
               >
                 {/* Top Left - Monkey Card */}
@@ -2551,7 +2559,9 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      objectFit: isMobileLandscape ? "contain" : "cover",
+                      padding: isMobileLandscape ? "6px" : "0px",
+                      background: "rgba(0,0,0,0.08)",
                     }}
                   />
                   {bets["monkey"] > 0 && (
@@ -2580,14 +2590,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: "clamp(4px, 0.6vh, 6px)",
+                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: "clamp(11px, 1.4vw, 15px)",
+                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -2624,7 +2634,9 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      objectFit: isMobileLandscape ? "contain" : "cover",
+                      padding: isMobileLandscape ? "6px" : "0px",
+                      background: "rgba(0,0,0,0.08)",
                     }}
                   />
                   {bets["rabbit"] > 0 && (
@@ -2653,14 +2665,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: "clamp(4px, 0.6vh, 6px)",
+                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: "clamp(11px, 1.4vw, 15px)",
+                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -2697,7 +2709,9 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      objectFit: isMobileLandscape ? "contain" : "cover",
+                      padding: isMobileLandscape ? "6px" : "0px",
+                      background: "rgba(0,0,0,0.08)",
                     }}
                   />
                   {bets["lion"] > 0 && (
@@ -2726,14 +2740,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: "clamp(4px, 0.6vh, 6px)",
+                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: "clamp(11px, 1.4vw, 15px)",
+                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -2770,7 +2784,9 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      objectFit: isMobileLandscape ? "contain" : "cover",
+                      padding: isMobileLandscape ? "6px" : "0px",
+                      background: "rgba(0,0,0,0.08)",
                     }}
                   />
                   {bets["panda"] > 0 && (
@@ -2799,14 +2815,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: "clamp(4px, 0.6vh, 6px)",
+                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: "clamp(11px, 1.4vw, 15px)",
+                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -2903,9 +2919,9 @@ const Game = () => {
             <div
               style={{
                 position: "absolute",
-                top: "45%", // ⬅ slightly higher
-                right: "22%", // ⬅ slightly inward
-                transform: "translate(45%, -45%) scale(0.9)", // ⬅ reduced size
+                top: isMobileLandscape ? "44%" : "45%",
+                right: isMobileLandscape ? "20%" : "22%",
+                transform: isMobileLandscape ? "translate(44%, -45%) scale(0.76)" : "translate(45%, -45%) scale(0.9)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -2919,9 +2935,9 @@ const Game = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gridTemplateRows: "repeat(2, 1fr)",
-                  gap: "clamp(4px, 0.8vw, 8px)",
-                  width: "clamp(220px, 22%, 300px)",
-                  height: "clamp(220px, 22%, 300px)",
+                  gap: isMobileLandscape ? "4px" : "clamp(4px, 0.8vw, 8px)",
+                  width: isMobileLandscape ? "170px" : "clamp(220px, 22%, 300px)",
+                  height: isMobileLandscape ? "170px" : "clamp(220px, 22%, 300px)",
                 }}
               >
                 {/* Top Left - Swallow Card */}
@@ -2951,7 +2967,9 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      objectFit: isMobileLandscape ? "contain" : "cover",
+                      padding: isMobileLandscape ? "6px" : "0px",
+                      background: "rgba(0,0,0,0.08)",
                     }}
                   />
                   {bets["swallow"] > 0 && (
@@ -2980,14 +2998,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: "clamp(4px, 0.6vh, 6px)",
+                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: "clamp(11px, 1.4vw, 15px)",
+                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -3024,7 +3042,9 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      objectFit: isMobileLandscape ? "contain" : "cover",
+                      padding: isMobileLandscape ? "6px" : "0px",
+                      background: "rgba(0,0,0,0.08)",
                     }}
                   />
                   {bets["pigeon"] > 0 && (
@@ -3053,14 +3073,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: "clamp(4px, 0.6vh, 6px)",
+                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: "clamp(11px, 1.4vw, 15px)",
+                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -3097,7 +3117,9 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      objectFit: isMobileLandscape ? "contain" : "cover",
+                      padding: isMobileLandscape ? "6px" : "0px",
+                      background: "rgba(0,0,0,0.08)",
                     }}
                   />
                   {bets["peacock"] > 0 && (
@@ -3126,14 +3148,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: "clamp(4px, 0.6vh, 6px)",
+                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: "clamp(11px, 1.4vw, 15px)",
+                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -3170,7 +3192,9 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      objectFit: isMobileLandscape ? "contain" : "cover",
+                      padding: isMobileLandscape ? "6px" : "0px",
+                      background: "rgba(0,0,0,0.08)",
                     }}
                   />
                   {bets["eagle"] > 0 && (
@@ -3199,14 +3223,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: "clamp(4px, 0.6vh, 6px)",
+                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: "clamp(11px, 1.4vw, 15px)",
+                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -3612,7 +3636,7 @@ const Game = () => {
                 position: "fixed",
                 top: `calc(${navH} + 6px)`,
                 left: "6px",
-                width: "52px",
+                width: "44px",
                 maxHeight: `calc(${appVh} - ${navH} - ${footerH} - 18px)`,
                 background: "rgba(26, 77, 46, 0.97)",
                 border: "2px solid #ffd700",
