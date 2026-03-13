@@ -77,6 +77,23 @@ const connectWithRetry = (attempt = 1) => {
 
 connectWithRetry();
   
+// Health check endpoint — used by UptimeRobot to keep the free server awake 24/7
+   app.get('/', (req, res) => {
+     res.status(200).json({
+       success: true,
+       message: 'Animal Battle backend is running'
+     });
+   });
+ 
+   app.get('/api/health', (req, res) => {
+     res.status(200).json({
+       success: true,
+       status: 'ok',
+       uptime: process.uptime(),
+       timestamp: new Date().toISOString()
+     });
+   });
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
