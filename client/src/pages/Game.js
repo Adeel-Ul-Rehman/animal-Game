@@ -82,7 +82,6 @@ const Game = () => {
   const [timeLeft, setTimeLeft] = useState(10);
   const [currentResult, setCurrentResult] = useState(null);
   const [historyResults, setHistoryResults] = useState([]);
-  const [winAnimation, setWinAnimation] = useState(null);
   const [countdown, setCountdown] = useState(null);
   const [showHistory, setShowHistory] = useState(false);
   const [showOnlinePlayers, setShowOnlinePlayers] = useState(false);
@@ -100,6 +99,7 @@ const Game = () => {
   const [showResultOverlay, setShowResultOverlay] = useState(false);
   const [winCoins, setWinCoins] = useState(null); // null = no win, number = coins won this round
   const [betPhaseMsg, setBetPhaseMsg] = useState(null); // 'start' | 'stop' | null
+  const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(true); // Fullscreen prompt on first load
   // Game-stopped and ban state
   const [gameStopped, setGameStopped] = useState(false);
   const [userBanned, setUserBanned] = useState(user?.isBanned || false);
@@ -179,8 +179,8 @@ const Game = () => {
   // Responsive layout values derived from isMobileLandscape
   const appVh      = `${viewportHeight}px`;
   const navH       = isMobileLandscape ? "34px"  : "clamp(45px, 7vh, 60px)";
-  const footerH    = isMobileLandscape ? "46px"  : "clamp(74px, 10.5vh, 88px)";
-  const boardOff   = isMobileLandscape ? "88px"  : "140px";
+  const footerH    = isMobileLandscape ? "54px"  : "clamp(74px, 10.5vh, 88px)";
+  const boardOff   = isMobileLandscape ? "96px"  : "150px";
   const chipSize   = isMobileLandscape ? "24px"  : "clamp(40px, 5.2vw, 50px)";
   const chipFont   = isMobileLandscape ? "6px"   : "clamp(8px, 0.9vw, 11px)";
   const btnSz      = isMobileLandscape ? "24px"  : "clamp(28px, 4vw, 38px)";
@@ -500,15 +500,16 @@ const Game = () => {
       .catch((err) => console.warn('Failed to load history from DB:', err));
   }, [token]);
 
-  // Auto-scroll history to bottom when new results arrive
+  // Auto-scroll history column to show latest result
   useEffect(() => {
-    // setTimeout ensures DOM has updated before we measure scrollHeight
-    const t = setTimeout(() => {
-      if (historyScrollRef.current) {
-        historyScrollRef.current.scrollTop = historyScrollRef.current.scrollHeight;
-      }
-    }, 50);
-    return () => clearTimeout(t);
+    if (historyScrollRef.current && historyResults.length > 0) {
+      // Scroll to bottom to show latest result
+      setTimeout(() => {
+        if (historyScrollRef.current) {
+          historyScrollRef.current.scrollTop = historyScrollRef.current.scrollHeight;
+        }
+      }, 50);
+    }
   }, [historyResults]);
 
   // Socket event handlers
@@ -578,10 +579,8 @@ const Game = () => {
     });
 
     socket.on("win-notification", (data) => {
-      setWinAnimation(data);
       updateUserCoins(data.newBalance);
       // win sound is already played by finishSpin — no duplicate here
-      setTimeout(() => setWinAnimation(null), 3000);
     });
 
     socket.on("history-results", (results) => {
@@ -597,9 +596,12 @@ const Game = () => {
     socket.on("history-update", (results) => {
       console.log(`📜 History updated: ${results.length} results`);
       const normalised = results.map((r) => ({
-        ...r,
+        roundId: r._id || r.id,
+        result: r.result,
+        resultDisplay: r.resultDisplay || r.result?.replace(/_/g, " ").toUpperCase() || "",
         display:    r.resultDisplay || r.result?.replace(/_/g, " ").toUpperCase() || "",
         multiplier: r.winningMultiplier ?? 0,
+        winningMultiplier: r.winningMultiplier ?? 0,
       }));
       setHistoryResults(normalised);
     });
@@ -655,7 +657,6 @@ const Game = () => {
       socket.off("betting-stopped");
       socket.off("spin-start");
       socket.off("round-result");
-      socket.off("win-notification");
       socket.off("history-results");
       socket.off("history-update");
       socket.off("coins-updated");
@@ -1347,6 +1348,116 @@ const Game = () => {
         </div>
       </div>
 
+      {/* Fullscreen Prompt Modal */}
+      <AnimatePresence>
+        {showFullscreenPrompt && !isMobileLandscape && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0, 0, 0, 0.85)",
+              backdropFilter: "blur(8px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 999,
+              padding: "20px",
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              style={{
+                background: "linear-gradient(135deg, #0a2f1f 0%, #1a4d2e 100%)",
+                border: "3px solid #ffd700",
+                borderRadius: "20px",
+                padding: "40px 32px",
+                textAlign: "center",
+                maxWidth: "420px",
+                width: "100%",
+                boxShadow: "0 0 60px rgba(255, 215, 0, 0.3), 0 0 20px rgba(255, 165, 0, 0.2)",
+              }}
+            >
+              <div style={{ fontSize: "64px", marginBottom: "18px" }}>📺</div>
+              <h2 style={{ fontSize: "24px", fontWeight: "900", color: "#ffd700", marginBottom: "14px", margin: "0 0 14px 0" }}>
+                Full Screen Recommended
+              </h2>
+              <p style={{ fontSize: "15px", color: "#fff", lineHeight: 1.6, marginBottom: "24px", margin: "0 0 24px 0" }}>
+                Click the <strong style={{ color: "#ffd700" }}>Fullscreen Button</strong> in the top-right corner to play in landscape mode for the best experience!
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <button
+                  onClick={async () => {
+                    await requestFullscreen();
+                    setShowFullscreenPrompt(false);
+                  }}
+                  style={{
+                    width: "100%",
+                    height: "48px",
+                    background: "linear-gradient(135deg, #ffd700 0%, #ff9500 100%)",
+                    border: "none",
+                    borderRadius: "12px",
+                    color: "#1a0a00",
+                    fontSize: "16px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    boxShadow: "0 4px 15px rgba(255, 215, 0, 0.4)",
+                    transition: "all 0.2s",
+                    letterSpacing: "0.5px",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 215, 0, 0.5)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "";
+                    e.currentTarget.style.boxShadow = "0 4px 15px rgba(255, 215, 0, 0.4)";
+                  }}
+                >
+                  <FaExpand /> Enter Full Screen
+                </button>
+                <button
+                  onClick={() => setShowFullscreenPrompt(false)}
+                  style={{
+                    width: "100%",
+                    height: "44px",
+                    background: "rgba(255, 255, 255, 0.1)",
+                    border: "2px solid rgba(255, 215, 0, 0.4)",
+                    borderRadius: "12px",
+                    color: "#ffd700",
+                    fontSize: "15px",
+                    fontWeight: "700",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)";
+                    e.currentTarget.style.borderColor = "rgba(255, 215, 0, 0.6)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+                    e.currentTarget.style.borderColor = "rgba(255, 215, 0, 0.4)";
+                  }}
+                >
+                  Play Without Fullscreen
+                </button>
+              </div>
+              <p style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.5)", marginTop: "16px", margin: "16px 0 0 0" }}>
+                You can always switch to fullscreen using the button in the header
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Main Game Container */}
       <div
         className="w-full overflow-hidden flex flex-col landscape:flex portrait:hidden"
@@ -1606,43 +1717,6 @@ const Game = () => {
           )}
         </AnimatePresence>
         {/* ── END PROFILE MODAL ─────────────────────────────────────── */}
-        {/* Win Animation Overlay */}
-        <AnimatePresence>
-          {winAnimation && (
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
-            >
-              <div
-                style={{
-                  background:
-                    "linear-gradient(135deg, #ffd700 0%, #ff9800 50%, #f44336 100%)",
-                  padding: "40px 60px",
-                  borderRadius: "20px",
-                  textAlign: "center",
-                  boxShadow: "0 0 40px rgba(255, 215, 0, 0.8)",
-                  transform: "rotate(3deg)",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "60px",
-                    fontWeight: "bold",
-                    marginBottom: "10px",
-                  }}
-                >
-                  +{winAnimation.amount}
-                </div>
-                <div style={{ fontSize: "28px", fontWeight: "bold" }}>
-                  COINS WON!
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {/* Countdown Overlay */}
         <AnimatePresence>
           {countdown && countdown <= 3 && (
@@ -3691,6 +3765,7 @@ const Game = () => {
             gap: "clamp(5px, 0.8vw, 11px)",
             flexShrink: 0,
             boxShadow: "0 -4px 18px rgba(0,0,0,0.5)",
+            overflow: "hidden",
           }}
         >
           {/* ── Total Bet box — left side ── */}
