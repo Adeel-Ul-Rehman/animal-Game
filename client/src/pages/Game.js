@@ -178,13 +178,13 @@ const Game = () => {
 
   // Responsive layout values derived from isMobileLandscape
   const appVh      = `${viewportHeight}px`;
-  const navH       = isMobileLandscape ? "34px"  : "clamp(48px, 8vh, 64px)";
-  const footerH    = isMobileLandscape ? "54px"  : "clamp(66px, 9.5vh, 78px)";
-  const boardOff   = isMobileLandscape ? "96px"  : "clamp(138px, 17.5vh, 156px)";
-  const chipSize   = isMobileLandscape ? "24px"  : "clamp(34px, 4.8vw, 44px)";
-  const chipFont   = isMobileLandscape ? "6px"   : "clamp(7px, 0.85vw, 9px)";
-  const btnSz      = isMobileLandscape ? "24px"  : "clamp(30px, 4.2vw, 38px)";
-  const btnFsz     = isMobileLandscape ? "10px"  : "clamp(13px, 1.8vw, 17px)";
+  const navH       = isMobileLandscape ? "34px"  : "clamp(50px, 9vh, 70px)";
+  const footerH    = isMobileLandscape ? "54px"  : "clamp(68px, 10vh, 85px)";
+  const boardOff   = isMobileLandscape ? "96px"  : "clamp(128px, 19vh, 165px)";
+  const chipSize   = isMobileLandscape ? "24px"  : "clamp(36px, 5vw, 45px)";
+  const chipFont   = isMobileLandscape ? "6px"   : "clamp(8px, 0.95vw, 10px)";
+  const btnSz      = isMobileLandscape ? "24px"  : "clamp(32px, 4.5vw, 42px)";
+  const btnFsz     = isMobileLandscape ? "10px"  : "clamp(14px, 1.9vw, 18px)";
 
   const requestFullscreen = async () => {
     try {
@@ -1335,22 +1335,12 @@ const Game = () => {
         `}
       </style>
 
-      {/* Mobile Portrait Warning */}
-      <div className="portrait:flex hidden fixed inset-0 bg-[#0a2f1f] items-center justify-center z-50 text-white text-center px-8">
-        <div>
-          <div className="text-6xl mb-4">📱</div>
-          <div className="text-2xl font-bold mb-2">
-            Please Rotate Your Device
-          </div>
-          <div className="text-lg">
-            This game is best played in landscape mode
-          </div>
-        </div>
-      </div>
+      {/* Mobile Portrait Warning - REMOVED FOR PORTRAIT SUPPORT */}
+      {/* Game now supports both portrait and landscape modes */}
 
       {/* Fullscreen Prompt Modal */}
       <AnimatePresence>
-        {showFullscreenPrompt && !isMobileLandscape && (
+        {showFullscreenPrompt && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -1384,16 +1374,22 @@ const Game = () => {
             >
               <div style={{ fontSize: "64px", marginBottom: "18px" }}>📺</div>
               <h2 style={{ fontSize: "24px", fontWeight: "900", color: "#ffd700", marginBottom: "14px", margin: "0 0 14px 0" }}>
-                Full Screen Recommended
+                {isMobileLandscape ? "Full Screen Recommended" : "Best Experience"}
               </h2>
               <p style={{ fontSize: "15px", color: "#fff", lineHeight: 1.6, marginBottom: "24px", margin: "0 0 24px 0" }}>
-                Click the <strong style={{ color: "#ffd700" }}>Fullscreen Button</strong> in the top-right corner to play in landscape mode for the best experience!
+                {isMobileLandscape 
+                  ? "Click the Fullscreen Button in the top-right corner to play in full screen for the best experience!" 
+                  : "Portrait mode is supported! Use Portrait or Landscape. Click Fullscreen button for immersive play!"}
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 <button
                   onClick={async () => {
-                    await requestFullscreen();
-                    setShowFullscreenPrompt(false);
+                    try {
+                      await requestFullscreen();
+                      setShowFullscreenPrompt(false);
+                    } catch (e) {
+                      setShowFullscreenPrompt(false);
+                    }
                   }}
                   style={{
                     width: "100%",
@@ -1422,7 +1418,7 @@ const Game = () => {
                     e.currentTarget.style.boxShadow = "0 4px 15px rgba(255, 215, 0, 0.4)";
                   }}
                 >
-                  <FaExpand /> Enter Full Screen
+                  <FaExpand /> {isMobileLandscape ? "Enter Full Screen" : "Try Full Screen"}
                 </button>
                 <button
                   onClick={() => setShowFullscreenPrompt(false)}
@@ -1447,20 +1443,20 @@ const Game = () => {
                     e.currentTarget.style.borderColor = "rgba(255, 215, 0, 0.4)";
                   }}
                 >
-                  Play Without Fullscreen
+                  {isMobileLandscape ? "Play Without Fullscreen" : "Close & Play"}
                 </button>
               </div>
               <p style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.5)", marginTop: "16px", margin: "16px 0 0 0" }}>
-                You can always switch to fullscreen using the button in the header
+                You can always access fullscreen from the header button
               </p>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Main Game Container */}
+      {/* Main Game Container - Now supports portrait and landscape */}
       <div
-        className="w-full overflow-hidden flex flex-col landscape:flex portrait:hidden"
+        className="w-full overflow-hidden flex flex-col"
         style={{
           background: "linear-gradient(135deg, #0a2f1f 0%, #1a4d2e 100%)",
           color: "#ffffff",
@@ -2196,7 +2192,7 @@ const Game = () => {
                 color: "#ffd700",
                 fontSize: btnFsz,
                 cursor: "pointer",
-                display: isMobileLandscape ? "flex" : "none",
+                display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -2335,10 +2331,10 @@ const Game = () => {
               position: "relative",
               width: isMobileLandscape
                 ? `min(86vw, calc((${appVh} - ${boardOff}) * 1.56))`
-                : `min(98vw, calc((${appVh} - ${boardOff}) * 1.65))`,
+                : `min(95vw, calc((${appVh} - ${boardOff}) * 1.6))`,
               height: isMobileLandscape
                 ? `min(calc(${appVh} - ${boardOff}), calc(86vw / 1.56))`
-                : `min(calc(${appVh} - ${boardOff}), calc(98vw / 1.65))`,
+                : `min(calc(${appVh} - ${boardOff}), calc(95vw / 1.6))`,
               maxWidth: "1800px",
               maxHeight: "1000px",
             }}
@@ -2584,9 +2580,9 @@ const Game = () => {
             <div
               style={{
                 position: "absolute",
-                top: isMobileLandscape ? "46%" : "48%",
+                top: isMobileLandscape ? "46%" : "47%",
                 left: isMobileLandscape ? "24%" : "26%",
-                transform: isMobileLandscape ? "translate(-50%, -50%) scale(0.76)" : "translate(-50%, -50%) scale(0.88)",
+                transform: isMobileLandscape ? "translate(-50%, -50%) scale(0.76)" : "translate(-50%, -50%) scale(0.85)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -2600,10 +2596,10 @@ const Game = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gridTemplateRows: "repeat(2, 1fr)",
-                  gap: isMobileLandscape ? "4px" : "clamp(5px, 1vw, 9px)",
+                  gap: isMobileLandscape ? "4px" : "clamp(4px, 0.9vw, 9px)",
                   transform: isMobileLandscape ? "translate(3px, 3px)" : "translate(0px, 0px)",
-                  width: isMobileLandscape ? "170px" : "clamp(200px, 20%, 280px)",
-                  height: isMobileLandscape ? "170px" : "clamp(200px, 20%, 280px)",
+                  width: isMobileLandscape ? "170px" : "clamp(190px, 19%, 280px)",
+                  height: isMobileLandscape ? "170px" : "clamp(190px, 19%, 280px)",
                 }}
               >
                 {/* Top Left - Monkey Card */}
@@ -2993,9 +2989,9 @@ const Game = () => {
             <div
               style={{
                 position: "absolute",
-                top: isMobileLandscape ? "44%" : "48%",
+                top: isMobileLandscape ? "44%" : "47%",
                 right: isMobileLandscape ? "20%" : "26%",
-                transform: isMobileLandscape ? "translate(44%, -45%) scale(0.76)" : "translate(50%, -50%) scale(0.88)",
+                transform: isMobileLandscape ? "translate(44%, -45%) scale(0.76)" : "translate(50%, -50%) scale(0.85)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -3009,9 +3005,9 @@ const Game = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gridTemplateRows: "repeat(2, 1fr)",
-                  gap: isMobileLandscape ? "4px" : "clamp(5px, 1vw, 9px)",
-                  width: isMobileLandscape ? "170px" : "clamp(200px, 20%, 280px)",
-                  height: isMobileLandscape ? "170px" : "clamp(200px, 20%, 280px)",
+                  gap: isMobileLandscape ? "4px" : "clamp(4px, 0.9vw, 9px)",
+                  width: isMobileLandscape ? "170px" : "clamp(190px, 19%, 280px)",
+                  height: isMobileLandscape ? "170px" : "clamp(190px, 19%, 280px)",
                 }}
               >
                 {/* Top Left - Swallow Card */}
@@ -3403,11 +3399,11 @@ const Game = () => {
                 position: "absolute",
                 top: "50%",
                 left: "50%",
-                transform: isMobileLandscape ? "translate(-50%, -50%) scale(0.9)" : "translate(-50%, -50%) scale(0.88)", // ⬅ shrink container
+                transform: isMobileLandscape ? "translate(-50%, -50%) scale(0.9)" : "translate(-50%, -50%) scale(0.85)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: isMobileLandscape ? "clamp(3px, 0.5vw, 5px)" : "clamp(4px, 0.6vw, 6px)", // ⬅ tighter spacing
+                gap: isMobileLandscape ? "clamp(3px, 0.5vw, 5px)" : "clamp(3px, 0.5vw, 5px)",
                 zIndex: 1,
               }}
             >
