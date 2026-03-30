@@ -30,6 +30,10 @@ const { startGameLoop } = require('./utils/gameEngine');
 const app = express();
 const httpServer = createServer(app);
 
+// Determine environment
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+// CORS configuration
 const rawClientUrls = (process.env.CLIENT_URL || 'http://localhost:3000')
   .split(',')
   .map((url) => url.trim())
@@ -42,16 +46,28 @@ const normalizedAllowedOrigins = [...new Set(rawClientUrls.flatMap((url) => {
   return [`https://${url}`, `http://${url}`];
 }))];
 
+// In development, also allow localhost:3000 and 127.0.0.1:3000
+if (isDevelopment) {
+  normalizedAllowedOrigins.push('http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5000');
+}
+
+// Remove duplicates
+const allowedOrigins = [...new Set(normalizedAllowedOrigins)];
+
+console.log('🔐 CORS Allowed Origins:', allowedOrigins);
+
 const corsOriginValidator = (origin, callback) => {
-  if (!origin) return callback(null, true);
-  if (normalizedAllowedOrigins.includes(origin)) return callback(null, true);
+  if (!origin) return callback(null, true); // Allow requests with no origin (like mobile apps or curl)
+  if (isDevelopment) return callback(null, true); // Allow all in development
+  if (allowedOrigins.includes(origin)) return callback(null, true);
   return callback(new Error(`Not allowed by CORS: ${origin}`));
 };
 
 const io = new Server(httpServer, {
   cors: {
-    origin: normalizedAllowedOrigins,
-    credentials: true
+    origin: isDevelopment ? '*' : allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'POST'],
   }
 });
 
@@ -60,8 +76,10 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors({
-  origin: corsOriginValidator,
-  credentials: true
+  origin: isDevelopment ? '*' : corsOriginValidator,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
