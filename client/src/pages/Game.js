@@ -167,7 +167,7 @@ const Game = () => {
   const appVh      = `${viewportHeight}px`;
   const navH       = "clamp(50px, 9vh, 70px)";
   const footerH    = "clamp(68px, 12vh, 100px)";
-  const boardOff   = "clamp(80px, 12vh, 100px)";
+  const boardOff   = "clamp(30px, 3vh, 40px)";
   const chipSize   = "clamp(36px, 5vw, 45px)";
   const chipFont   = "clamp(8px, 0.95vw, 10px)";
   const btnSz      = "clamp(32px, 4.5vw, 42px)";
@@ -2423,7 +2423,7 @@ const Game = () => {
         <main
           style={{
             flex: 1,
-            padding: "clamp(3px, 0.4vh, 5px)",
+            padding: "clamp(1px, 0.1vh, 2px)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -2700,10 +2700,10 @@ const Game = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gridTemplateRows: "repeat(2, 1fr)",
-                  gap: "clamp(2px, 0.4vw, 4px)",
+                  gap: "clamp(3px, 0.6vw, 6px)",
                   transform: "translate(0px, 0px)",
-                  width: "clamp(90px, 9%, 130px)",
-                  height: "clamp(90px, 9%, 130px)",
+                  width: "clamp(140px, 14%, 200px)",
+                  height: "clamp(140px, 14%, 200px)",
                 }}
               >
                 {/* Top Left - Monkey Card */}
@@ -3109,9 +3109,9 @@ const Game = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gridTemplateRows: "repeat(2, 1fr)",
-                  gap: "clamp(2px, 0.4vw, 4px)",
-                  width: "clamp(90px, 9%, 130px)",
-                  height: "clamp(90px, 9%, 130px)",
+                  gap: "clamp(3px, 0.6vw, 6px)",
+                  width: "clamp(140px, 14%, 200px)",
+                  height: "clamp(140px, 14%, 200px)",
                 }}
               >
                 {/* Top Left - Swallow Card */}
@@ -3518,11 +3518,11 @@ const Game = () => {
                     "linear-gradient(135deg, #1a4d2e 0%, #0a2f1f 100%)",
                   border: "2px solid #ffd700",
                   borderRadius: "6px",
-                  padding: "clamp(4px, 0.5vh, 6px) clamp(8px, 1.2vw, 14px)",
+                  padding: "clamp(3px, 0.4vh, 5px) clamp(6px, 1vw, 12px)",
                   boxShadow: "0 3px 8px rgba(255, 215, 0, 0.4)",
-                  minWidth: "clamp(70px, 9vw, 120px)",
+                  minWidth: "clamp(55px, 7vw, 100px)",
                   textAlign: "center",
-                  marginTop: "clamp(4px, 0.8vh, 8px)",
+                  marginTop: "clamp(3px, 0.6vh, 6px)",
                   pointerEvents: "none",
                 }}
               >
@@ -3565,8 +3565,8 @@ const Game = () => {
                     bets["goldenShark"] > 0
                       ? "0 0 20px rgba(255, 215, 0, 0.95)"
                       : "0 4px 12px rgba(255, 215, 0, 0.6)",
-                  width: "clamp(75px, 10vw, 120px)",
-                  height: "clamp(75px, 10vw, 120px)",
+                  width: "clamp(60px, 8vw, 100px)",
+                  height: "clamp(60px, 8vw, 100px)",
                   cursor: "pointer",
                   transition: "all 0.3s",
                 }}
@@ -3639,9 +3639,9 @@ const Game = () => {
                     bets["shark24x"] > 0
                       ? "0 0 15px rgba(76, 175, 80, 0.8)"
                       : "0 3px 8px rgba(0, 0, 0, 0.3)",
-                  width: "clamp(65px, 8vw, 110px)",
-                  height: "clamp(65px, 8vw, 110px)",
-                  marginTop: "clamp(-4px, -0.6vh, -2px)",
+                  width: "clamp(50px, 6.5vw, 85px)",
+                  height: "clamp(50px, 6.5vw, 85px)",
+                  marginTop: "clamp(-3px, -0.4vh, -1px)",
                   cursor: "pointer",
                   transition: "all 0.3s",
                 }}
