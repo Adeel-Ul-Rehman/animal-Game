@@ -2002,32 +2002,6 @@ const Game = () => {
               flexShrink: 0,
             }}
           >
-            {/* MOBILE HAMBURGER MENU - Hidden on desktop */}
-            <button
-              onClick={() => setShowMobileMenu(!showMobileMenu)}
-              style={{
-                width: btnSz,
-                height: btnSz,
-                borderRadius: "6px",
-                background: "#1a4d2e",
-                border: "2px solid #ffd700",
-                color: "#ffd700",
-                fontSize: btnFsz,
-                cursor: "pointer",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "3px",
-              }}
-              className="mobile-hamburger-btn"
-              title="Menu"
-            >
-              <div style={{ width: "20px", height: "2px", background: "#ffd700" }} />
-              <div style={{ width: "20px", height: "2px", background: "#ffd700" }} />
-              <div style={{ width: "20px", height: "2px", background: "#ffd700" }} />
-            </button>
-
             {/* Request Coins Button */}
             <button
               onClick={() => setShowCoinRequest(true)}
@@ -2234,25 +2208,51 @@ const Game = () => {
             >
               <FaSignOutAlt />
             </button>
+
+            {/* MOBILE HAMBURGER MENU - Hidden on desktop, on the FAR RIGHT */}
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              style={{
+                width: btnSz,
+                height: btnSz,
+                borderRadius: "6px",
+                background: "#1a4d2e",
+                border: "2px solid #ffd700",
+                color: "#ffd700",
+                fontSize: btnFsz,
+                cursor: "pointer",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "3px",
+              }}
+              className="mobile-hamburger-btn"
+              title="Menu"
+            >
+              <div style={{ width: "20px", height: "2px", background: "#ffd700" }} />
+              <div style={{ width: "20px", height: "2px", background: "#ffd700" }} />
+              <div style={{ width: "20px", height: "2px", background: "#ffd700" }} />
+            </button>
           </div>
         </header>
 
-        {/* MOBILE MENU DRAWER */}
+        {/* MOBILE MENU DRAWER - Slides from RIGHT */}
         <AnimatePresence>
           {showMobileMenu && (
             <motion.div
-              initial={{ opacity: 0, x: "-100%" }}
+              initial={{ opacity: 0, x: "100%" }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: "-100%" }}
+              exit={{ opacity: 0, x: "100%" }}
               transition={{ duration: 0.3 }}
               style={{
                 position: "fixed",
                 top: navH,
-                left: 0,
+                right: 0,
                 width: "min(300px, 80vw)",
                 height: `calc(100vh - ${navH})`,
                 background: "linear-gradient(135deg, #0a2f1f 0%, #1a4d2e 100%)",
-                borderRight: "2px solid #ffd700",
+                borderLeft: "2px solid #ffd700",
                 boxShadow: "0 4px 15px rgba(0, 0, 0, 0.6)",
                 zIndex: 999,
                 display: "flex",
