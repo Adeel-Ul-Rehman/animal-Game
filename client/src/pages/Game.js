@@ -2640,14 +2640,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
+                      padding: "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
+                        fontSize: "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -2715,14 +2715,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
+                      padding: "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
+                        fontSize: "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -2790,14 +2790,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
+                      padding: "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
+                        fontSize: "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -2865,14 +2865,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
+                      padding: "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
+                        fontSize: "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -3048,14 +3048,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
+                      padding: "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
+                        fontSize: "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -3123,14 +3123,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
+                      padding: "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
+                        fontSize: "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -3198,14 +3198,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
+                      padding: "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
+                        fontSize: "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -3273,14 +3273,14 @@ const Game = () => {
                       left: 0,
                       right: 0,
                       background: "rgba(0, 0, 0, 0.75)",
-                      padding: isMobileLandscape ? "3px" : "clamp(4px, 0.6vh, 6px)",
+                      padding: "clamp(4px, 0.6vh, 6px)",
                       borderTop: "2px solid #ffd700",
                     }}
                   >
                     <div
                       style={{
                         color: "#ffffff",
-                        fontSize: isMobileLandscape ? "9px" : "clamp(11px, 1.4vw, 15px)",
+                        fontSize: "clamp(11px, 1.4vw, 15px)",
                         fontWeight: "bold",
                         textAlign: "center",
                       }}
@@ -3379,11 +3379,11 @@ const Game = () => {
                 position: "absolute",
                 top: "50%",
                 left: "50%",
-                transform: isMobileLandscape ? "translate(-50%, -50%) scale(0.9)" : "translate(-50%, -50%) scale(0.85)",
+                transform: "translate(-50%, -50%) scale(0.85)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: isMobileLandscape ? "clamp(3px, 0.5vw, 5px)" : "clamp(3px, 0.5vw, 5px)",
+                gap: "clamp(3px, 0.5vw, 5px)",
                 zIndex: 1,
               }}
             >
@@ -3394,18 +3394,18 @@ const Game = () => {
                     "linear-gradient(135deg, #1a4d2e 0%, #0a2f1f 100%)",
                   border: "2px solid #ffd700",
                   borderRadius: "6px",
-                  padding: isMobileLandscape ? "clamp(5px, 0.6vh, 7px) clamp(10px, 1.5vw, 16px)" : "clamp(4px, 0.5vh, 6px) clamp(8px, 1.2vw, 14px)",
+                  padding: "clamp(4px, 0.5vh, 6px) clamp(8px, 1.2vw, 14px)",
                   boxShadow: "0 3px 8px rgba(255, 215, 0, 0.4)",
-                  minWidth: isMobileLandscape ? "clamp(80px, 10vw, 140px)" : "clamp(70px, 9vw, 120px)",
+                  minWidth: "clamp(70px, 9vw, 120px)",
                   textAlign: "center",
-                  marginTop: isMobileLandscape ? "clamp(8px, 1.2vh, 12px)" : "clamp(4px, 0.8vh, 8px)",
+                  marginTop: "clamp(4px, 0.8vh, 8px)",
                   pointerEvents: "none",
                 }}
               >
                 <div
                   style={{
                     color: "#ffd700",
-                    fontSize: isMobileLandscape ? "clamp(7px, 0.9vw, 10px)" : "clamp(6px, 0.8vw, 8px)",
+                    fontSize: "clamp(6px, 0.8vw, 8px)",
                     fontWeight: "bold",
                     marginBottom: "clamp(2px, 0.3vh, 3px)",
                     letterSpacing: "0.5px",
@@ -3596,7 +3596,7 @@ const Game = () => {
               overflowX: "hidden",
               padding:
                 "clamp(6px, 0.8vw, 12px) clamp(6px, 0.8vw, 12px) clamp(10px, 1.2vw, 16px)",
-              display: isMobileLandscape ? "none" : "flex",
+              display: "flex",
               flexDirection: "column",
               gap: "clamp(5px, 0.6vw, 8px)",
               zIndex: 2,
@@ -3677,7 +3677,7 @@ const Game = () => {
         </main>
 
         <AnimatePresence>
-          {isMobileLandscape && showHistory && (
+          {showHistory && (
             <motion.div
               initial={{ opacity: 0, x: -24 }}
               animate={{ opacity: 1, x: 0 }}
@@ -3732,13 +3732,13 @@ const Game = () => {
             borderTop: "2px solid rgba(255,215,0,0.6)",
             background: "linear-gradient(180deg, rgba(10,47,31,0.95) 0%, rgba(6,28,18,0.98) 100%)",
             backdropFilter: "blur(6px)",
-            padding: isMobileLandscape ? "0 clamp(10px, 1.8vw, 22px)" : "0 clamp(8px, 1.2vw, 14px)",
+            padding: "0 clamp(8px, 1.2vw, 14px)",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
             position: "relative",
-            gap: isMobileLandscape ? "clamp(5px, 0.8vw, 11px)" : "clamp(6px, 1vw, 10px)",
+            gap: "clamp(6px, 1vw, 10px)",
             flexShrink: 0,
             boxShadow: "0 -4px 18px rgba(0,0,0,0.5)",
             overflow: "hidden",
@@ -3748,20 +3748,20 @@ const Game = () => {
           <div
             style={{
               position: "absolute",
-              left: isMobileLandscape ? "clamp(10px, 1.8vw, 22px)" : "clamp(8px, 1.5vw, 16px)",
+              left: "clamp(8px, 1.5vw, 16px)",
               background: "rgba(255,215,0,0.07)",
               border: "1.5px solid rgba(255,215,0,0.5)",
               borderRadius: "10px",
-              padding: isMobileLandscape ? "3px 8px" : "clamp(3px, 0.5vh, 5px) clamp(8px, 1vw, 12px)",
+              padding: "clamp(3px, 0.5vh, 5px) clamp(8px, 1vw, 12px)",
               flexShrink: 0,
               textAlign: "center",
-              minWidth: isMobileLandscape ? "60px" : "clamp(62px, 8vw, 90px)",
+              minWidth: "clamp(62px, 8vw, 90px)",
             }}
           >
-            <div style={{ fontSize: isMobileLandscape ? "7px" : "clamp(6px, 0.7vw, 8px)", color: "rgba(255,215,0,0.7)", letterSpacing: "0.8px", textTransform: "uppercase", marginBottom: "2px" }}>
+            <div style={{ fontSize: "clamp(6px, 0.7vw, 8px)", color: "rgba(255,215,0,0.7)", letterSpacing: "0.8px", textTransform: "uppercase", marginBottom: "2px" }}>
               Bet
             </div>
-            <div style={{ fontSize: isMobileLandscape ? "12px" : "clamp(11px, 1.5vw, 16px)", fontWeight: "bold", color: "#ffd700", lineHeight: 1 }}>
+            <div style={{ fontSize: "clamp(11px, 1.5vw, 16px)", fontWeight: "bold", color: "#ffd700", lineHeight: 1 }}>
               {totalBet.toLocaleString()}
             </div>
           </div>
@@ -3770,7 +3770,7 @@ const Game = () => {
           <div
             style={{
               display: "flex",
-              gap: isMobileLandscape ? "clamp(5px, 0.8vw, 11px)" : "clamp(5px, 0.9vw, 9px)",
+              gap: "clamp(5px, 0.9vw, 9px)",
               alignItems: "center",
               flexShrink: 0,
             }}
@@ -4053,10 +4053,10 @@ const Game = () => {
             exit={{ opacity: 0, x: 40 }}
             style={{
               position: "fixed",
-              top: isMobileLandscape ? "44px" : "clamp(60px,9vh,80px)",
+              top: "clamp(60px,9vh,80px)",
               right: "16px",
-              width: isMobileLandscape ? "min(260px, 60vw)" : "clamp(260px,30vw,320px)",
-              maxHeight: isMobileLandscape ? `calc(${appVh} - 52px)` : `calc(${appVh} - 100px)`,
+              width: "clamp(260px,30vw,320px)",
+              maxHeight: `calc(${appVh} - 100px)`,
               background: "linear-gradient(160deg,#0a2f1f,#1a4d2e)",
               border: "2px solid #ffd700",
               borderRadius: "14px",
