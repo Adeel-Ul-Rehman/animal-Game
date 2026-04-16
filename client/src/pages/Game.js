@@ -99,7 +99,7 @@ const Game = () => {
   const [showResultOverlay, setShowResultOverlay] = useState(false);
   const [winCoins, setWinCoins] = useState(null); // null = no win, number = coins won this round
   const [betPhaseMsg, setBetPhaseMsg] = useState(null); // 'start' | 'stop' | null
-  const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(true); // Fullscreen prompt on first load
+
   // Game-stopped and ban state
   const [gameStopped, setGameStopped] = useState(false);
   const [userBanned, setUserBanned] = useState(user?.isBanned || false);
@@ -172,19 +172,6 @@ const Game = () => {
   const chipFont   = "clamp(8px, 0.95vw, 10px)";
   const btnSz      = "clamp(32px, 4.5vw, 42px)";
   const btnFsz     = "clamp(14px, 1.9vw, 18px)";
-
-  const requestFullscreen = async () => {
-    try {
-      const el = document.documentElement;
-      if (el.requestFullscreen) {
-        await el.requestFullscreen();
-      } else if (el.webkitRequestFullscreen) {
-        await el.webkitRequestFullscreen();
-      }
-    } catch (error) {
-      toast('Use Add to Home Screen for true full-screen on this browser');
-    }
-  };
 
   // Profile modal state
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -1355,119 +1342,7 @@ const Game = () => {
       {/* Mobile Portrait Warning - REMOVED FOR PORTRAIT SUPPORT */}
       {/* Game now supports both portrait and landscape modes */}
 
-      {/* Fullscreen Prompt Modal */}
-      <AnimatePresence>
-        {showFullscreenPrompt && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: "fixed",
-              inset: 0,
-              background: "rgba(0, 0, 0, 0.85)",
-              backdropFilter: "blur(8px)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 999,
-              padding: "20px",
-            }}
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              style={{
-                background: "linear-gradient(135deg, #0a2f1f 0%, #1a4d2e 100%)",
-                border: "3px solid #ffd700",
-                borderRadius: "20px",
-                padding: "40px 32px",
-                textAlign: "center",
-                maxWidth: "420px",
-                width: "100%",
-                boxShadow: "0 0 60px rgba(255, 215, 0, 0.3), 0 0 20px rgba(255, 165, 0, 0.2)",
-              }}
-            >
-              <div style={{ fontSize: "64px", marginBottom: "18px" }}>📺</div>
-              <h2 style={{ fontSize: "24px", fontWeight: "900", color: "#ffd700", marginBottom: "14px", margin: "0 0 14px 0" }}>
-                Best Experience
-              </h2>
-              <p style={{ fontSize: "15px", color: "#fff", lineHeight: 1.6, marginBottom: "24px", margin: "0 0 24px 0" }}>
-                Portrait mode optimized! You can enjoy the game in portrait or landscape. Click Fullscreen for immersive experience!
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                <button
-                  onClick={async () => {
-                    try {
-                      await requestFullscreen();
-                      setShowFullscreenPrompt(false);
-                    } catch (e) {
-                      setShowFullscreenPrompt(false);
-                    }
-                  }}
-                  style={{
-                    width: "100%",
-                    height: "48px",
-                    background: "linear-gradient(135deg, #ffd700 0%, #ff9500 100%)",
-                    border: "none",
-                    borderRadius: "12px",
-                    color: "#1a0a00",
-                    fontSize: "16px",
-                    fontWeight: "800",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                    boxShadow: "0 4px 15px rgba(255, 215, 0, 0.4)",
-                    transition: "all 0.2s",
-                    letterSpacing: "0.5px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 215, 0, 0.5)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "";
-                    e.currentTarget.style.boxShadow = "0 4px 15px rgba(255, 215, 0, 0.4)";
-                  }}
-                >
-                  <FaExpand /> Try Full Screen
-                </button>
-                <button
-                  onClick={() => setShowFullscreenPrompt(false)}
-                  style={{
-                    width: "100%",
-                    height: "44px",
-                    background: "rgba(255, 255, 255, 0.1)",
-                    border: "2px solid rgba(255, 215, 0, 0.4)",
-                    borderRadius: "12px",
-                    color: "#ffd700",
-                    fontSize: "15px",
-                    fontWeight: "700",
-                    cursor: "pointer",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)";
-                    e.currentTarget.style.borderColor = "rgba(255, 215, 0, 0.6)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
-                    e.currentTarget.style.borderColor = "rgba(255, 215, 0, 0.4)";
-                  }}
-                >
-                  Close & Play
-                </button>
-              </div>
-              <p style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.5)", marginTop: "16px", margin: "16px 0 0 0" }}>
-                You can always access fullscreen from the header button
-              </p>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
 
       {/* Main Game Container - Now supports portrait and landscape */}
       <div
@@ -2008,6 +1883,26 @@ const Game = () => {
             flexShrink: 0,
           }}
         >
+          {/* Left - Logo/Brand */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "clamp(40px, 6vw, 60px)",
+              height: "clamp(40px, 6vw, 60px)",
+              background: "linear-gradient(135deg, #ffd700, #ffed4e)",
+              borderRadius: "8px",
+              border: "2px solid #ffd700",
+              flexShrink: 0,
+              fontSize: "clamp(16px, 2.5vw, 28px)",
+              fontWeight: "bold",
+              color: "#1a4d2e",
+            }}
+          >
+            🎰
+          </div>
+
           {/* Left - User Info (click avatar to open profile) - Desktop Only */}
           <div
             className="desktop-only"
@@ -2227,26 +2122,7 @@ const Game = () => {
               <FaHistory />
             </button>
 
-            <button
-              onClick={requestFullscreen}
-              style={{
-                width: btnSz,
-                height: btnSz,
-                borderRadius: "6px",
-                background: "#1a4d2e",
-                border: "2px solid #ffd700",
-                color: "#ffd700",
-                fontSize: btnFsz,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              className="desktop-only"
-              title="Fullscreen"
-            >
-              <FaExpand />
-            </button>
+
 
             <button
               onClick={() => setShowOnlinePlayers(!showOnlinePlayers)}
@@ -2314,7 +2190,7 @@ const Game = () => {
               }
             </button>
 
-            {/* Sound Toggle */}
+            {/* Sound Toggle - Visible on both desktop and mobile */}
             <button
               onClick={toggleSound}
               title={isMuted ? 'Unmute' : 'Mute'}
@@ -2333,7 +2209,6 @@ const Game = () => {
                 transition: "all 0.2s",
                 flexShrink: 0,
               }}
-              className="desktop-only"
             >
               {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
             </button>
@@ -2462,29 +2337,6 @@ const Game = () => {
                       {onlinePlayers.length}
                     </span>
                   )}
-                </button>
-
-                {/* Fullscreen */}
-                <button
-                  onClick={() => {
-                    requestFullscreen();
-                    setShowMobileMenu(false);
-                  }}
-                  style={{
-                    padding: "clamp(10px, 1.5vh, 14px)",
-                    background: "rgba(0,0,0,0.3)",
-                    border: "2px solid #ffd700",
-                    borderRadius: "8px",
-                    color: "#ffd700",
-                    fontSize: "clamp(12px, 1.5vw, 14px)",
-                    fontWeight: "bold",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                  }}
-                >
-                  <FaExpand /> Fullscreen
                 </button>
 
                 {/* Profile */}
