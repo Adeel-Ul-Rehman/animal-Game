@@ -167,7 +167,7 @@ const Game = () => {
   const appVh      = `${viewportHeight}px`;
   const navH       = "clamp(50px, 9vh, 70px)";
   const footerH    = "clamp(68px, 12vh, 100px)";
-  const boardOff   = "clamp(30px, 3vh, 40px)";
+  const boardOff   = "clamp(140px, 22vh, 180px)";
   const chipSize   = "clamp(36px, 5vw, 45px)";
   const chipFont   = "clamp(8px, 0.95vw, 10px)";
   const btnSz      = "clamp(32px, 4.5vw, 42px)";
@@ -524,9 +524,10 @@ const Game = () => {
     });
 
     socket.on("spin-start", (data) => {
-      setCurrentResult(null);
-      // Use the exact box index from backend
-      startSpinAnimation(data.boxIndex);
+      // DISABLED: Auto-spin disabled for now
+      // setCurrentResult(null);
+      // startSpinAnimation(data.boxIndex);
+      console.log("🛑 Spin auto-start disabled - will be enabled manually later");
     });
 
     socket.on("round-result", (data) => {
@@ -652,6 +653,20 @@ const Game = () => {
         clearTimeout(spinTimeoutRef.current);
       }
     };
+  }, []);
+
+  // Clear spin on mount (stop any existing animations)
+  useEffect(() => {
+    if (spinIntervalRef.current) {
+      clearInterval(spinIntervalRef.current);
+      spinIntervalRef.current = null;
+    }
+    if (spinTimeoutRef.current) {
+      clearTimeout(spinTimeoutRef.current);
+      spinTimeoutRef.current = null;
+    }
+    setSpinSnake([]);
+    setSpinIntensity(0);
   }, []);
 
   // Handle bet placement — coins deducted immediately, no reversal possible
@@ -1344,6 +1359,45 @@ const Game = () => {
             
             .mobile-hamburger-btn {
               display: flex !important;
+            }
+          }
+
+          /* ── MOBILE-ONLY SIZE ADJUSTMENTS ── */
+          @media (max-width: 768px) {
+            /* Mobile layout adjustments */
+            .game-main-area {
+              padding: clamp(1px, 0.1vh, 2px) !important;
+            }
+
+            /* Reduce beast/bird grids for mobile */
+            .beast-grid-mobile {
+              width: clamp(110px, 11%, 150px) !important;
+              height: clamp(110px, 11%, 150px) !important;
+              gap: clamp(2px, 0.3vw, 4px) !important;
+            }
+
+            .bird-grid-mobile {
+              width: clamp(110px, 11%, 150px) !important;
+              height: clamp(110px, 11%, 150px) !important;
+              gap: clamp(2px, 0.3vw, 4px) !important;
+            }
+
+            /* Reduce shark sizes on mobile */
+            .golden-shark-mobile {
+              width: clamp(55px, 7vw, 90px) !important;
+              height: clamp(55px, 7vw, 90px) !important;
+            }
+
+            .shark-mobile {
+              width: clamp(45px, 5.5vw, 75px) !important;
+              height: clamp(45px, 5.5vw, 75px) !important;
+            }
+
+            /* Reduce total bet on mobile */
+            .total-bet-mobile {
+              minWidth: clamp(55px, 7vw, 100px) !important;
+              padding: clamp(3px, 0.4vh, 5px) clamp(6px, 1vw, 12px) !important;
+              marginTop: clamp(3px, 0.6vh, 6px) !important;
             }
           }
         `}
@@ -2423,7 +2477,7 @@ const Game = () => {
         <main
           style={{
             flex: 1,
-            padding: "clamp(1px, 0.1vh, 2px)",
+            padding: "clamp(3px, 0.4vh, 5px)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -2432,6 +2486,7 @@ const Game = () => {
             position: "relative",
             minHeight: 0,
           }}
+          className="game-main-area"
         >
           {/* Complete Rectangle Border - Hollow Rectangle */}
           <div
@@ -3006,87 +3061,6 @@ const Game = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Beast 2x Button */}
-              <button
-                data-bet-type="beast2x"
-                onClick={() => handleBet("beast2x")}
-                style={{
-                  pointerEvents: "auto",
-                  padding: "clamp(3px, 0.5vh, 5px) clamp(8px, 1.3vw, 15px)",
-                  background:
-                    bets["beast2x"] > 0
-                      ? "linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%)"
-                      : "linear-gradient(135deg, #4CAF50 0%, #45a049 100%)",
-                  border:
-                    bets["beast2x"] > 0
-                      ? "2px solid #66BB6A"
-                      : "2px solid #ffd700",
-                  borderRadius: "6px",
-                  color: "#ffffff",
-                  transform: "translateY(3px)",
-                  fontSize: "clamp(10px, 1.2vw, 12px)",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  boxShadow:
-                    bets["beast2x"] > 0
-                      ? "0 0 10px rgba(76, 175, 80, 0.6)"
-                      : "0 2px 6px rgba(76, 175, 80, 0.35)",
-                  transition: "all 0.25s ease",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.8px",
-                  width: "clamp(70px, 9vw, 110px)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "3px",
-                  position: "relative",
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.boxShadow =
-                    "0 4px 12px rgba(76, 175, 80, 0.65)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.boxShadow =
-                    bets["beast2x"] > 0
-                      ? "0 0 14px rgba(76, 175, 80, 0.8)"
-                      : "0 2px 8px rgba(76, 175, 80, 0.45)";
-                }}
-              >
-                <span>Beast</span>
-                <span
-                  style={{
-                    color: "#ffd700",
-                    fontSize: "clamp(12px, 1.4vw, 14px)",
-                  }}
-                >
-                  x2
-                </span>
-
-                {bets["beast2x"] > 0 && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "-6px", // SAME
-                      right: "-6px", // SAME
-                      background: "#ffffff",
-                      color: "#4CAF50",
-                      padding: "2px 5px", // SAME
-                      borderRadius: "50%",
-                      fontSize: "clamp(9px, 1vw, 11px)", // SAME
-                      fontWeight: "bold",
-                      border: "1.5px solid #4CAF50",
-                      minWidth: "clamp(18px, 2vw, 24px)", // SAME
-                      minHeight: "clamp(18px, 2vw, 24px)", // SAME
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {bets["beast2x"]}
-                  </div>
-                )}
-              </button>
             </div>
 
             {/* Center Images - Right Side (Birds) */}
@@ -3414,87 +3388,6 @@ const Game = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Bird 2x Button */}
-              <button
-                data-bet-type="bird2x"
-                onClick={() => handleBet("bird2x")}
-                style={{
-                  pointerEvents: "auto",
-                  padding: "clamp(3px, 0.5vh, 5px) clamp(8px, 1.3vw, 15px)",
-                  background:
-                    bets["bird2x"] > 0
-                      ? "linear-gradient(135deg, #42A5F5 0%, #2196F3 100%)"
-                      : "linear-gradient(135deg, #2196F3 0%, #1976D2 100%)",
-                  border:
-                    bets["bird2x"] > 0
-                      ? "2px solid #42A5F5"
-                      : "2px solid #ffd700",
-                  borderRadius: "6px",
-                  color: "#ffffff",
-                  transform: "translateY(3px)",
-                  fontSize: "clamp(10px, 1.2vw, 12px)",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  boxShadow:
-                    bets["bird2x"] > 0
-                      ? "0 0 10px rgba(33, 150, 243, 0.6)"
-                      : "0 2px 6px rgba(33, 150, 243, 0.35)",
-                  transition: "all 0.25s ease",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.8px",
-                  width: "clamp(70px, 9vw, 110px)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "3px",
-                  position: "relative",
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.boxShadow =
-                    "0 4px 12px rgba(33, 150, 243, 0.65)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.boxShadow =
-                    bets["bird2x"] > 0
-                      ? "0 0 14px rgba(33, 150, 243, 0.8)"
-                      : "0 2px 8px rgba(33, 150, 243, 0.45)";
-                }}
-              >
-                <span>Bird</span>
-                <span
-                  style={{
-                    color: "#ffd700",
-                    fontSize: "clamp(12px, 1.4vw, 14px)",
-                  }}
-                >
-                  x2
-                </span>
-
-                {bets["bird2x"] > 0 && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "-6px",
-                      right: "-6px",
-                      background: "#ffffff",
-                      color: "#2196F3",
-                      padding: "2px 5px", // ⬅ smaller badge
-                      borderRadius: "50%",
-                      fontSize: "clamp(9px, 1vw, 11px)",
-                      fontWeight: "bold",
-                      border: "1.5px solid #2196F3",
-                      minWidth: "clamp(18px, 2vw, 24px)",
-                      minHeight: "clamp(18px, 2vw, 24px)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {bets["bird2x"]}
-                  </div>
-                )}
-              </button>
             </div>
 
             {/* Center Column - Total Bet & Sharks */}
