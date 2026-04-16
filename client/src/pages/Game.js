@@ -2043,10 +2043,10 @@ const Game = () => {
                   : gameStatus === "spinning"
                     ? "#FF9800"
                     : "#2196F3",
-              padding: isMobileLandscape ? "3px 10px" : "clamp(3px, 0.7vh, 6px) clamp(10px, 1.5vw, 20px)",
+              padding: "clamp(3px, 0.7vh, 6px) clamp(10px, 1.5vw, 20px)",
               borderRadius: "6px",
               border: "2px solid #ffd700",
-              fontSize: isMobileLandscape ? "10px" : "clamp(10px, 1.4vw, 14px)",
+              fontSize: "clamp(10px, 1.4vw, 14px)",
               fontWeight: "bold",
               textAlign: "center",
               whiteSpace: "nowrap",
