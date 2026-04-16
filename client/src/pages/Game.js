@@ -1331,6 +1331,12 @@ const Game = () => {
             .mobile-hamburger-btn {
               display: flex !important;
             }
+
+            /* Make header right section flex center on mobile */
+            header > div:last-child {
+              justify-content: center;
+              gap: 0;
+            }
           }
 
           @media (max-width: 1024px) {
@@ -2002,8 +2008,9 @@ const Game = () => {
             flexShrink: 0,
           }}
         >
-          {/* Left - User Info (click avatar to open profile) */}
+          {/* Left - User Info (click avatar to open profile) - Desktop Only */}
           <div
+            className="desktop-only"
             style={{
               display: "flex",
               alignItems: "center",
@@ -2059,8 +2066,9 @@ const Game = () => {
             </div>
           </div>
 
-          {/* Center - Game Status */}
+          {/* Center - Game Status - Desktop Only */}
           <div
+            className="desktop-only"
             style={{
               background:
                 gameStatus === "betting"
@@ -2103,7 +2111,6 @@ const Game = () => {
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
               style={{
-                display: "none", // Will be shown only on mobile via CSS
                 width: btnSz,
                 height: btnSz,
                 borderRadius: "6px",
@@ -2112,6 +2119,7 @@ const Game = () => {
                 color: "#ffd700",
                 fontSize: btnFsz,
                 cursor: "pointer",
+                display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
