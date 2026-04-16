@@ -104,6 +104,7 @@ const Game = () => {
   const [gameStopped, setGameStopped] = useState(false);
   const [userBanned, setUserBanned] = useState(user?.isBanned || false);
   const [userBanReason, setUserBanReason] = useState(user?.banReason || '');
+  const [showMobileMenu, setShowMobileMenu] = useState(false); // Mobile hamburger menu
   const gameStoppedRef = useRef(false); // used inside spin closures (avoids stale state)
 
   const previousBetsRef = useRef({});
@@ -1318,6 +1319,30 @@ const Game = () => {
             .coin-req-label { display: none !important; }
             .game-online-panel { top: 40px !important; max-height: calc(${appVh} - 52px) !important; }
           }
+
+          /* ── MOBILE RESPONSIVE STYLES ── */
+          @media (max-width: 768px) {
+            /* Hide desktop buttons on mobile */
+            .desktop-only {
+              display: none !important;
+            }
+            
+            /* Show hamburger menu on mobile */
+            .mobile-hamburger-btn {
+              display: flex !important;
+            }
+          }
+
+          @media (max-width: 1024px) {
+            /* Tablet and mobile adjustments */
+            .desktop-only {
+              display: none !important;
+            }
+            
+            .mobile-hamburger-btn {
+              display: flex !important;
+            }
+          }
         `}
       </style>
 
@@ -2074,6 +2099,32 @@ const Game = () => {
               flexShrink: 0,
             }}
           >
+            {/* MOBILE HAMBURGER MENU - Hidden on desktop */}
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              style={{
+                display: "none", // Will be shown only on mobile via CSS
+                width: btnSz,
+                height: btnSz,
+                borderRadius: "6px",
+                background: "#1a4d2e",
+                border: "2px solid #ffd700",
+                color: "#ffd700",
+                fontSize: btnFsz,
+                cursor: "pointer",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "3px",
+              }}
+              className="mobile-hamburger-btn"
+              title="Menu"
+            >
+              <div style={{ width: "20px", height: "2px", background: "#ffd700" }} />
+              <div style={{ width: "20px", height: "2px", background: "#ffd700" }} />
+              <div style={{ width: "20px", height: "2px", background: "#ffd700" }} />
+            </button>
+
             {/* Request Coins Button */}
             <button
               onClick={() => setShowCoinRequest(true)}
@@ -2093,6 +2144,7 @@ const Game = () => {
                 whiteSpace: "nowrap",
                 flexShrink: 0,
               }}
+              className="desktop-only"
               title="Request Coins"
             >
               <FaCoins style={{ fontSize: btnFsz }} />
@@ -2116,6 +2168,7 @@ const Game = () => {
                 justifyContent: "center",
                 position: "relative",
               }}
+              className="desktop-only"
               title={latestCoinRequest ? `Request ${latestCoinRequest.status}` : 'No requests'}
             >
               <FaBell />
@@ -2160,6 +2213,7 @@ const Game = () => {
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              className="desktop-only"
               title="History"
             >
               <FaHistory />
@@ -2180,6 +2234,7 @@ const Game = () => {
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              className="desktop-only"
               title="Fullscreen"
             >
               <FaExpand />
@@ -2201,6 +2256,7 @@ const Game = () => {
                 justifyContent: "center",
                 position: "relative",
               }}
+              className="desktop-only"
             >
               <FaUsers />
               {onlinePlayers.length > 0 && (
@@ -2242,6 +2298,7 @@ const Game = () => {
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              className="desktop-only"
             >
               {user?.profilePicture
                 ? <img src={user.profilePicture} alt="p" style={{ width: "22px", height: "22px", borderRadius: "50%", objectFit: "cover" }} />
@@ -2268,6 +2325,7 @@ const Game = () => {
                 transition: "all 0.2s",
                 flexShrink: 0,
               }}
+              className="desktop-only"
             >
               {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
             </button>
@@ -2289,11 +2347,227 @@ const Game = () => {
                 justifyContent: "center",
                 flexShrink: 0,
               }}
+              className="desktop-only"
             >
               <FaSignOutAlt />
             </button>
           </div>
         </header>
+
+        {/* MOBILE MENU DRAWER */}
+        <AnimatePresence>
+          {showMobileMenu && (
+            <motion.div
+              initial={{ opacity: 0, x: "-100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "-100%" }}
+              transition={{ duration: 0.3 }}
+              style={{
+                position: "fixed",
+                top: navH,
+                left: 0,
+                width: "min(300px, 80vw)",
+                height: `calc(100vh - ${navH})`,
+                background: "linear-gradient(135deg, #0a2f1f 0%, #1a4d2e 100%)",
+                borderRight: "2px solid #ffd700",
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.6)",
+                zIndex: 999,
+                display: "flex",
+                flexDirection: "column",
+                overflow: "auto",
+              }}
+              className="custom-scrollbar"
+            >
+              {/* Mobile Menu Items */}
+              <div style={{ padding: "clamp(8px, 1.5vh, 16px)", display: "flex", flexDirection: "column", gap: "clamp(6px, 1vh, 12px)" }}>
+                {/* Coins Request */}
+                <button
+                  onClick={() => {
+                    setShowCoinRequest(true);
+                    setShowMobileMenu(false);
+                  }}
+                  style={{
+                    padding: "clamp(10px, 1.5vh, 14px)",
+                    background: "linear-gradient(135deg, #1565C0, #0D47A1)",
+                    border: "2px solid rgba(100,180,255,0.6)",
+                    borderRadius: "8px",
+                    color: "#e8f4ff",
+                    fontSize: "clamp(12px, 1.5vw, 14px)",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <FaCoins /> Request Coins
+                </button>
+
+                {/* History Toggle */}
+                <button
+                  onClick={() => {
+                    setShowHistory(!showHistory);
+                    setShowMobileMenu(false);
+                  }}
+                  style={{
+                    padding: "clamp(10px, 1.5vh, 14px)",
+                    background: showHistory ? "#2f6f42" : "rgba(0,0,0,0.3)",
+                    border: "2px solid #ffd700",
+                    borderRadius: "8px",
+                    color: "#ffd700",
+                    fontSize: "clamp(12px, 1.5vw, 14px)",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <FaHistory /> {showHistory ? "Hide" : "Show"} History
+                </button>
+
+                {/* Online Players */}
+                <button
+                  onClick={() => {
+                    setShowOnlinePlayers(!showOnlinePlayers);
+                    setShowMobileMenu(false);
+                  }}
+                  style={{
+                    padding: "clamp(10px, 1.5vh, 14px)",
+                    background: "rgba(0,0,0,0.3)",
+                    border: "2px solid #ffd700",
+                    borderRadius: "8px",
+                    color: "#ffd700",
+                    fontSize: "clamp(12px, 1.5vw, 14px)",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    position: "relative",
+                  }}
+                >
+                  <FaUsers />
+                  Online Players
+                  {onlinePlayers.length > 0 && (
+                    <span style={{ marginLeft: "auto", background: "#f44336", color: "#fff", padding: "2px 6px", borderRadius: "50%", fontSize: "clamp(10px, 1.2vw, 12px)", fontWeight: "bold" }}>
+                      {onlinePlayers.length}
+                    </span>
+                  )}
+                </button>
+
+                {/* Fullscreen */}
+                <button
+                  onClick={() => {
+                    requestFullscreen();
+                    setShowMobileMenu(false);
+                  }}
+                  style={{
+                    padding: "clamp(10px, 1.5vh, 14px)",
+                    background: "rgba(0,0,0,0.3)",
+                    border: "2px solid #ffd700",
+                    borderRadius: "8px",
+                    color: "#ffd700",
+                    fontSize: "clamp(12px, 1.5vw, 14px)",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <FaExpand /> Fullscreen
+                </button>
+
+                {/* Profile */}
+                <button
+                  onClick={() => {
+                    openProfileModal();
+                    setShowMobileMenu(false);
+                  }}
+                  style={{
+                    padding: "clamp(10px, 1.5vh, 14px)",
+                    background: "rgba(0,0,0,0.3)",
+                    border: "2px solid #ffd700",
+                    borderRadius: "8px",
+                    color: "#ffd700",
+                    fontSize: "clamp(12px, 1.5vw, 14px)",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <FaEdit /> Profile
+                </button>
+
+                {/* Sound Toggle */}
+                <button
+                  onClick={() => {
+                    toggleSound();
+                    setShowMobileMenu(false);
+                  }}
+                  style={{
+                    padding: "clamp(10px, 1.5vh, 14px)",
+                    background: isMuted ? "rgba(244,67,54,0.25)" : "rgba(0,0,0,0.3)",
+                    border: `2px solid ${isMuted ? '#f44336' : '#ffd700'}`,
+                    borderRadius: "8px",
+                    color: isMuted ? "#f44336" : "#ffd700",
+                    fontSize: "clamp(12px, 1.5vw, 14px)",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+                  {isMuted ? "Unmute" : "Mute"} Sound
+                </button>
+
+                {/* Logout */}
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setShowMobileMenu(false);
+                  }}
+                  style={{
+                    padding: "clamp(10px, 1.5vh, 14px)",
+                    background: "rgba(244,67,54,0.25)",
+                    border: "2px solid #f44336",
+                    borderRadius: "8px",
+                    color: "#f44336",
+                    fontSize: "clamp(12px, 1.5vw, 14px)",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <FaSignOutAlt /> Logout
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Mobile Menu Backdrop */}
+        {showMobileMenu && (
+          <div
+            onClick={() => setShowMobileMenu(false)}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.5)",
+              zIndex: 990,
+            }}
+          />
+        )}
 
         {/* MAIN GAME AREA */}
         <main
