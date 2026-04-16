@@ -17,16 +17,7 @@ const AppContent = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const isGameRoute = location.pathname === '/game';
-    const isAuthRoute = ['/login', '/register', '/forgot-password', '/reset-password'].includes(location.pathname);
-
-    document.body.classList.toggle('force-landscape', isGameRoute);
-    document.body.classList.toggle('auth-page', isAuthRoute);
-
-    return () => {
-      document.body.classList.remove('force-landscape');
-      document.body.classList.remove('auth-page');
-    };
+    // App is now fully responsive - portrait and landscape supported
   }, [location.pathname]);
 
   return (
@@ -58,21 +49,7 @@ const AppContent = () => {
               }}
             />
             
-            {/* Mobile Portrait Warning - Shown via CSS */}
-            <div className="portrait:flex hidden fixed inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 items-center justify-center z-50 text-white text-center px-8">
-              <div>
-                <div className="text-6xl mb-4 animate-bounce">📱</div>
-                <div className="text-2xl font-bold mb-2">
-                  Please Rotate Your Device
-                </div>
-                <div className="text-lg opacity-80">
-                  This game is best played in landscape mode
-                </div>
-                <div className="mt-8 text-sm opacity-60">
-                  Rotate your phone for the best experience
-                </div>
-              </div>
-            </div>
+            {/* Mobile Portrait Support - Fully responsive layout */}
             
           <Routes>
             <Route path="/login" element={<Login />} />

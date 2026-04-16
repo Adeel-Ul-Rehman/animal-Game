@@ -134,18 +134,7 @@ const Game = () => {
     }
   };
 
-  // Mobile landscape detection — broader threshold for phones up to 900px wide
-  const [isMobileLandscape, setIsMobileLandscape] = useState(
-    () => window.innerWidth <= 1024 && window.innerHeight <= 600 && window.innerWidth > window.innerHeight
-  );
-  useEffect(() => {
-    const check = () => setIsMobileLandscape(
-      window.innerWidth <= 1024 && window.innerHeight <= 600 && window.innerWidth > window.innerHeight
-    );
-    window.addEventListener("resize", check);
-    window.addEventListener("orientationchange", check);
-    return () => { window.removeEventListener("resize", check); window.removeEventListener("orientationchange", check); };
-  }, []);
+  // App now supports both portrait and landscape - removed landscape-only enforcement
 
   useEffect(() => {
     const updateViewportHeight = () => {
@@ -168,23 +157,20 @@ const Game = () => {
     };
   }, []);
 
+  // Show history by default in portrait mode
   useEffect(() => {
-    if (isMobileLandscape) {
-      setShowHistory(true);
-    } else {
-      setShowHistory(false);
-    }
-  }, [isMobileLandscape]);
+    setShowHistory(true);
+  }, []);
 
-  // Responsive layout values derived from isMobileLandscape
+  // Responsive layout values for portrait mode
   const appVh      = `${viewportHeight}px`;
-  const navH       = isMobileLandscape ? "34px"  : "clamp(50px, 9vh, 70px)";
-  const footerH    = isMobileLandscape ? "54px"  : "clamp(68px, 10vh, 85px)";
-  const boardOff   = isMobileLandscape ? "96px"  : "clamp(128px, 19vh, 165px)";
-  const chipSize   = isMobileLandscape ? "24px"  : "clamp(36px, 5vw, 45px)";
-  const chipFont   = isMobileLandscape ? "6px"   : "clamp(8px, 0.95vw, 10px)";
-  const btnSz      = isMobileLandscape ? "24px"  : "clamp(32px, 4.5vw, 42px)";
-  const btnFsz     = isMobileLandscape ? "10px"  : "clamp(14px, 1.9vw, 18px)";
+  const navH       = "clamp(50px, 9vh, 70px)";
+  const footerH    = "clamp(68px, 12vh, 100px)";
+  const boardOff   = "clamp(140px, 22vh, 180px)";
+  const chipSize   = "clamp(36px, 5vw, 45px)";
+  const chipFont   = "clamp(8px, 0.95vw, 10px)";
+  const btnSz      = "clamp(32px, 4.5vw, 42px)";
+  const btnFsz     = "clamp(14px, 1.9vw, 18px)";
 
   const requestFullscreen = async () => {
     try {
@@ -1374,12 +1360,10 @@ const Game = () => {
             >
               <div style={{ fontSize: "64px", marginBottom: "18px" }}>📺</div>
               <h2 style={{ fontSize: "24px", fontWeight: "900", color: "#ffd700", marginBottom: "14px", margin: "0 0 14px 0" }}>
-                {isMobileLandscape ? "Full Screen Recommended" : "Best Experience"}
+                Best Experience
               </h2>
               <p style={{ fontSize: "15px", color: "#fff", lineHeight: 1.6, marginBottom: "24px", margin: "0 0 24px 0" }}>
-                {isMobileLandscape 
-                  ? "Click the Fullscreen Button in the top-right corner to play in full screen for the best experience!" 
-                  : "Portrait mode is supported! Use Portrait or Landscape. Click Fullscreen button for immersive play!"}
+                Portrait mode optimized! You can enjoy the game in portrait or landscape. Click Fullscreen for immersive experience!
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 <button
@@ -1418,7 +1402,7 @@ const Game = () => {
                     e.currentTarget.style.boxShadow = "0 4px 15px rgba(255, 215, 0, 0.4)";
                   }}
                 >
-                  <FaExpand /> {isMobileLandscape ? "Enter Full Screen" : "Try Full Screen"}
+                  <FaExpand /> Try Full Screen
                 </button>
                 <button
                   onClick={() => setShowFullscreenPrompt(false)}
@@ -1443,7 +1427,7 @@ const Game = () => {
                     e.currentTarget.style.borderColor = "rgba(255, 215, 0, 0.4)";
                   }}
                 >
-                  {isMobileLandscape ? "Play Without Fullscreen" : "Close & Play"}
+                  Close & Play
                 </button>
               </div>
               <p style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.5)", marginTop: "16px", margin: "16px 0 0 0" }}>
@@ -2005,15 +1989,15 @@ const Game = () => {
               onClick={openProfileModal}
               title="Edit profile"
               style={{
-                width: isMobileLandscape ? "28px" : "clamp(30px, 4.5vw, 40px)",
-                height: isMobileLandscape ? "28px" : "clamp(30px, 4.5vw, 40px)",
+                width: "clamp(30px, 4.5vw, 40px)",
+                height: "clamp(30px, 4.5vw, 40px)",
                 borderRadius: "50%",
                 background: "linear-gradient(135deg, #2196F3, #9C27B0)",
                 border: "2px solid #ffd700",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: isMobileLandscape ? "12px" : "clamp(12px, 1.8vw, 18px)",
+                fontSize: "clamp(12px, 1.8vw, 18px)",
                 fontWeight: "bold",
                 cursor: "pointer",
                 overflow: "hidden",
@@ -2028,7 +2012,7 @@ const Game = () => {
             <div>
               <div
                 style={{
-                  fontSize: isMobileLandscape ? "10px" : "clamp(10px, 1.3vw, 13px)",
+                  fontSize: "clamp(10px, 1.3vw, 13px)",
                   fontWeight: "bold",
                 }}
               >
@@ -2036,7 +2020,7 @@ const Game = () => {
               </div>
               <div
                 style={{
-                  fontSize: isMobileLandscape ? "10px" : "clamp(11px, 1.5vw, 14px)",
+                  fontSize: "clamp(11px, 1.5vw, 14px)",
                   color: "#ffd700",
                   fontWeight: "bold",
                   display: "flex",
@@ -2085,7 +2069,7 @@ const Game = () => {
           <div
             style={{
               display: "flex",
-              gap: isMobileLandscape ? "3px" : "clamp(3px, 0.6vw, 6px)",
+              gap: "clamp(3px, 0.6vw, 6px)",
               alignItems: "center",
               flexShrink: 0,
             }}
@@ -2095,12 +2079,12 @@ const Game = () => {
               onClick={() => setShowCoinRequest(true)}
               style={{
                 height: btnSz,
-                padding: isMobileLandscape ? "0 6px" : "0 clamp(6px, 1vw, 11px)",
+                padding: "0 clamp(6px, 1vw, 11px)",
                 borderRadius: "6px",
                 background: "linear-gradient(135deg, #1565C0, #0D47A1)",
                 border: "2px solid rgba(100,180,255,0.6)",
                 color: "#e8f4ff",
-                fontSize: isMobileLandscape ? "10px" : "clamp(8px, 1vw, 11px)",
+                fontSize: "clamp(8px, 1vw, 11px)",
                 fontWeight: "700",
                 cursor: "pointer",
                 display: "flex",
@@ -2112,7 +2096,7 @@ const Game = () => {
               title="Request Coins"
             >
               <FaCoins style={{ fontSize: btnFsz }} />
-              {!isMobileLandscape && <span>Coins</span>}
+              <span>Coins</span>
             </button>
 
             {/* Notification Bell */}
@@ -2172,7 +2156,7 @@ const Game = () => {
                 color: "#ffd700",
                 fontSize: btnFsz,
                 cursor: "pointer",
-                display: isMobileLandscape ? "flex" : "none",
+                display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -2315,7 +2299,7 @@ const Game = () => {
         <main
           style={{
             flex: 1,
-            padding: isMobileLandscape ? "clamp(2px, 0.3vh, 4px)" : "clamp(3px, 0.4vh, 5px)",
+            padding: "clamp(3px, 0.4vh, 5px)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -2329,12 +2313,8 @@ const Game = () => {
           <div
             style={{
               position: "relative",
-              width: isMobileLandscape
-                ? `min(86vw, calc((${appVh} - ${boardOff}) * 1.56))`
-                : `min(95vw, calc((${appVh} - ${boardOff}) * 1.6))`,
-              height: isMobileLandscape
-                ? `min(calc(${appVh} - ${boardOff}), calc(86vw / 1.56))`
-                : `min(calc(${appVh} - ${boardOff}), calc(95vw / 1.6))`,
+              width: `min(95vw, calc((${appVh} - ${boardOff}) * 1.6))`,
+              height: `min(calc(${appVh} - ${boardOff}), calc(95vw / 1.6))`,
               maxWidth: "1800px",
               maxHeight: "1000px",
             }}
@@ -2348,7 +2328,7 @@ const Game = () => {
                 gap: "0px",
                 width: "100%",
                 height: "100%",
-                border: isMobileLandscape ? "2px solid #ffd700" : "2px solid #ffd700",
+                border: "2px solid #ffd700",
               }}
             >
               {/* TOP ROW - Complete horizontal line */}
@@ -2580,9 +2560,9 @@ const Game = () => {
             <div
               style={{
                 position: "absolute",
-                top: isMobileLandscape ? "46%" : "47%",
-                left: isMobileLandscape ? "24%" : "26%",
-                transform: isMobileLandscape ? "translate(-50%, -50%) scale(0.76)" : "translate(-50%, -50%) scale(0.85)",
+                top: "47%",
+                left: "26%",
+                transform: "translate(-50%, -50%) scale(0.85)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -2596,10 +2576,10 @@ const Game = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gridTemplateRows: "repeat(2, 1fr)",
-                  gap: isMobileLandscape ? "4px" : "clamp(4px, 0.9vw, 9px)",
-                  transform: isMobileLandscape ? "translate(3px, 3px)" : "translate(0px, 0px)",
-                  width: isMobileLandscape ? "170px" : "clamp(190px, 19%, 280px)",
-                  height: isMobileLandscape ? "170px" : "clamp(190px, 19%, 280px)",
+                  gap: "clamp(4px, 0.9vw, 9px)",
+                  transform: "translate(0px, 0px)",
+                  width: "clamp(190px, 19%, 280px)",
+                  height: "clamp(190px, 19%, 280px)",
                 }}
               >
                 {/* Top Left - Monkey Card */}
@@ -2629,8 +2609,8 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: isMobileLandscape ? "contain" : "cover",
-                      padding: isMobileLandscape ? "6px" : "0px",
+                      objectFit: "cover",
+                      padding: "0px",
                       background: "rgba(0,0,0,0.08)",
                     }}
                   />
@@ -2704,8 +2684,8 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: isMobileLandscape ? "contain" : "cover",
-                      padding: isMobileLandscape ? "6px" : "0px",
+                      objectFit: "cover",
+                      padding: "0px",
                       background: "rgba(0,0,0,0.08)",
                     }}
                   />
@@ -2779,8 +2759,8 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: isMobileLandscape ? "contain" : "cover",
-                      padding: isMobileLandscape ? "6px" : "0px",
+                      objectFit: "cover",
+                      padding: "0px",
                       background: "rgba(0,0,0,0.08)",
                     }}
                   />
@@ -2854,8 +2834,8 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: isMobileLandscape ? "contain" : "cover",
-                      padding: isMobileLandscape ? "6px" : "0px",
+                      objectFit: "cover",
+                      padding: "0px",
                       background: "rgba(0,0,0,0.08)",
                     }}
                   />
@@ -2989,13 +2969,13 @@ const Game = () => {
             <div
               style={{
                 position: "absolute",
-                top: isMobileLandscape ? "44%" : "47%",
-                right: isMobileLandscape ? "20%" : "26%",
-                transform: isMobileLandscape ? "translate(44%, -45%) scale(0.76)" : "translate(50%, -50%) scale(0.85)",
+                top: "47%",
+                right: "26%",
+                transform: "translate(50%, -50%) scale(0.85)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: "clamp(4px, 0.6vw, 6px)", // ⬅ tighter spacing
+                gap: "clamp(4px, 0.6vw, 6px)",
                 zIndex: 1,
               }}
             >
@@ -3005,9 +2985,9 @@ const Game = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gridTemplateRows: "repeat(2, 1fr)",
-                  gap: isMobileLandscape ? "4px" : "clamp(4px, 0.9vw, 9px)",
-                  width: isMobileLandscape ? "170px" : "clamp(190px, 19%, 280px)",
-                  height: isMobileLandscape ? "170px" : "clamp(190px, 19%, 280px)",
+                  gap: "clamp(4px, 0.9vw, 9px)",
+                  width: "clamp(190px, 19%, 280px)",
+                  height: "clamp(190px, 19%, 280px)",
                 }}
               >
                 {/* Top Left - Swallow Card */}
@@ -3037,8 +3017,8 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: isMobileLandscape ? "contain" : "cover",
-                      padding: isMobileLandscape ? "6px" : "0px",
+                      objectFit: "cover",
+                      padding: "0px",
                       background: "rgba(0,0,0,0.08)",
                     }}
                   />
@@ -3112,8 +3092,8 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: isMobileLandscape ? "contain" : "cover",
-                      padding: isMobileLandscape ? "6px" : "0px",
+                      objectFit: "cover",
+                      padding: "0px",
                       background: "rgba(0,0,0,0.08)",
                     }}
                   />
@@ -3187,8 +3167,8 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: isMobileLandscape ? "contain" : "cover",
-                      padding: isMobileLandscape ? "6px" : "0px",
+                      objectFit: "cover",
+                      padding: "0px",
                       background: "rgba(0,0,0,0.08)",
                     }}
                   />
@@ -3262,8 +3242,8 @@ const Game = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      objectFit: isMobileLandscape ? "contain" : "cover",
-                      padding: isMobileLandscape ? "6px" : "0px",
+                      objectFit: "cover",
+                      padding: "0px",
                       background: "rgba(0,0,0,0.08)",
                     }}
                   />
