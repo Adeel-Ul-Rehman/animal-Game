@@ -167,7 +167,7 @@ const Game = () => {
   const appVh      = `${viewportHeight}px`;
   const navH       = "clamp(50px, 9vh, 70px)";
   const footerH    = "clamp(68px, 12vh, 100px)";
-  const boardOff   = "clamp(140px, 22vh, 180px)";
+  const boardOff   = "clamp(80px, 12vh, 100px)";
   const chipSize   = "clamp(36px, 5vw, 45px)";
   const chipFont   = "clamp(8px, 0.95vw, 10px)";
   const btnSz      = "clamp(32px, 4.5vw, 42px)";
@@ -1307,6 +1307,11 @@ const Game = () => {
             .game-online-panel { top: 40px !important; max-height: calc(${appVh} - 52px) !important; }
           }
 
+          /* Hide mobile user info on desktop by default */
+          .mobile-only-user-info {
+            display: none !important;
+          }
+
           /* ── MOBILE RESPONSIVE STYLES ── */
           @media (max-width: 768px) {
             /* Hide desktop buttons on mobile */
@@ -1316,6 +1321,11 @@ const Game = () => {
             
             /* Show hamburger menu on mobile */
             .mobile-hamburger-btn {
+              display: flex !important;
+            }
+
+            /* Show user info on mobile */
+            .mobile-only-user-info {
               display: flex !important;
             }
 
@@ -1883,34 +1893,14 @@ const Game = () => {
             flexShrink: 0,
           }}
         >
-          {/* Left - Logo/Brand */}
+          {/* Left - User Info (click avatar to open profile) - Mobile Only */}
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "clamp(40px, 6vw, 60px)",
-              height: "clamp(40px, 6vw, 60px)",
-              background: "linear-gradient(135deg, #ffd700, #ffed4e)",
-              borderRadius: "8px",
-              border: "2px solid #ffd700",
-              flexShrink: 0,
-              fontSize: "clamp(16px, 2.5vw, 28px)",
-              fontWeight: "bold",
-              color: "#1a4d2e",
-            }}
-          >
-            🎰
-          </div>
-
-          {/* Left - User Info (click avatar to open profile) - Desktop Only */}
-          <div
-            className="desktop-only"
             style={{
               display: "flex",
               alignItems: "center",
               gap: "clamp(4px, 0.8vw, 12px)",
             }}
+            className="mobile-only-user-info"
           >
             <div
               onClick={openProfileModal}
@@ -2710,10 +2700,10 @@ const Game = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gridTemplateRows: "repeat(2, 1fr)",
-                  gap: "clamp(4px, 0.9vw, 9px)",
+                  gap: "clamp(2px, 0.4vw, 4px)",
                   transform: "translate(0px, 0px)",
-                  width: "clamp(190px, 19%, 280px)",
-                  height: "clamp(190px, 19%, 280px)",
+                  width: "clamp(90px, 9%, 130px)",
+                  height: "clamp(90px, 9%, 130px)",
                 }}
               >
                 {/* Top Left - Monkey Card */}
@@ -3023,7 +3013,7 @@ const Game = () => {
                 onClick={() => handleBet("beast2x")}
                 style={{
                   pointerEvents: "auto",
-                  padding: "clamp(5px, 0.8vh, 8px) clamp(12px, 2vw, 24px)", // SAME
+                  padding: "clamp(3px, 0.5vh, 5px) clamp(8px, 1.3vw, 15px)",
                   background:
                     bets["beast2x"] > 0
                       ? "linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%)"
@@ -3032,24 +3022,24 @@ const Game = () => {
                     bets["beast2x"] > 0
                       ? "2px solid #66BB6A"
                       : "2px solid #ffd700",
-                  borderRadius: "6px", // SAME
+                  borderRadius: "6px",
                   color: "#ffffff",
-                  transform: "translateY(6px)", // SAME as Bird
-                  fontSize: "clamp(12px, 1.6vw, 16px)", // SAME
+                  transform: "translateY(3px)",
+                  fontSize: "clamp(10px, 1.2vw, 12px)",
                   fontWeight: "bold",
                   cursor: "pointer",
                   boxShadow:
                     bets["beast2x"] > 0
-                      ? "0 0 14px rgba(76, 175, 80, 0.8)"
-                      : "0 2px 8px rgba(76, 175, 80, 0.45)",
+                      ? "0 0 10px rgba(76, 175, 80, 0.6)"
+                      : "0 2px 6px rgba(76, 175, 80, 0.35)",
                   transition: "all 0.25s ease",
                   textTransform: "uppercase",
-                  letterSpacing: "1.2px", // SAME
-                  width: "clamp(105px, 14vw, 170px)", // SAME
+                  letterSpacing: "0.8px",
+                  width: "clamp(70px, 9vw, 110px)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "6px", // SAME
+                  gap: "3px",
                   position: "relative",
                 }}
                 onMouseEnter={(e) => {
@@ -3067,7 +3057,7 @@ const Game = () => {
                 <span
                   style={{
                     color: "#ffd700",
-                    fontSize: "clamp(14px, 1.8vw, 19px)", // SAME
+                    fontSize: "clamp(12px, 1.4vw, 14px)",
                   }}
                 >
                   x2
@@ -3119,9 +3109,9 @@ const Game = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gridTemplateRows: "repeat(2, 1fr)",
-                  gap: "clamp(4px, 0.9vw, 9px)",
-                  width: "clamp(190px, 19%, 280px)",
-                  height: "clamp(190px, 19%, 280px)",
+                  gap: "clamp(2px, 0.4vw, 4px)",
+                  width: "clamp(90px, 9%, 130px)",
+                  height: "clamp(90px, 9%, 130px)",
                 }}
               >
                 {/* Top Left - Swallow Card */}
@@ -3431,33 +3421,33 @@ const Game = () => {
                 onClick={() => handleBet("bird2x")}
                 style={{
                   pointerEvents: "auto",
-                  padding: "clamp(5px, 0.8vh, 8px) clamp(12px, 2vw, 24px)", // ⬅ reduced
+                  padding: "clamp(3px, 0.5vh, 5px) clamp(8px, 1.3vw, 15px)",
                   background:
                     bets["bird2x"] > 0
                       ? "linear-gradient(135deg, #42A5F5 0%, #2196F3 100%)"
                       : "linear-gradient(135deg, #2196F3 0%, #1976D2 100%)",
                   border:
                     bets["bird2x"] > 0
-                      ? "2px solid #42A5F5" // ⬅ thinner
+                      ? "2px solid #42A5F5"
                       : "2px solid #ffd700",
-                  borderRadius: "6px", // ⬅ smaller radius
+                  borderRadius: "6px",
                   color: "#ffffff",
-                  transform: "translateY(6px)", // ⬅ reduced offset
-                  fontSize: "clamp(12px, 1.6vw, 16px)", // ⬅ smaller text
+                  transform: "translateY(3px)",
+                  fontSize: "clamp(10px, 1.2vw, 12px)",
                   fontWeight: "bold",
                   cursor: "pointer",
                   boxShadow:
                     bets["bird2x"] > 0
-                      ? "0 0 14px rgba(33, 150, 243, 0.8)" // ⬅ lighter glow
-                      : "0 2px 8px rgba(33, 150, 243, 0.45)",
+                      ? "0 0 10px rgba(33, 150, 243, 0.6)"
+                      : "0 2px 6px rgba(33, 150, 243, 0.35)",
                   transition: "all 0.25s ease",
                   textTransform: "uppercase",
-                  letterSpacing: "1.2px", // ⬅ tighter
-                  width: "clamp(105px, 14vw, 170px)", // ⬅ reduced width
+                  letterSpacing: "0.8px",
+                  width: "clamp(70px, 9vw, 110px)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "6px", // ⬅ reduced gap
+                  gap: "3px",
                   position: "relative",
                 }}
                 onMouseEnter={(e) => {
@@ -3475,7 +3465,7 @@ const Game = () => {
                 <span
                   style={{
                     color: "#ffd700",
-                    fontSize: "clamp(14px, 1.8vw, 19px)", // ⬅ smaller x2
+                    fontSize: "clamp(12px, 1.4vw, 14px)",
                   }}
                 >
                   x2
